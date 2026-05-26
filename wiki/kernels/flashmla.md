@@ -45,7 +45,8 @@ performance_claims:
   value: 1450
   utilization: ~65%
   source_id: blog-flashmla
-blackwell_relevance: SM100 dense prefill achieves 1460 TFLOPS (vs 660 on SM90); Blackwell
+blackwell_relevance: SM100 dense prefill achieves 1460 TFLOPS on B200; SM90 has no dense
+  prefill kernel — only dense MLA decode (660 TFLOPS @ ~3 TB/s, memory-bound). Blackwell
   tcgen05 enables higher MLA throughput.
 artifact_dir: artifacts/kernels/flashmla
 ---

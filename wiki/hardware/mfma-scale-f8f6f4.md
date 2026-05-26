@@ -76,7 +76,7 @@ the same Clang-version caveat above).
 | Issue | Single thread | Single wave (64 lanes) |
 | Accumulator | TMEM (256 KB CTA-visible) | AGPR (per-wave) |
 | Block size | 32 elements | 32 elements |
-| Scale dtype | UE8M0 (NVFP4) or UE4M3 (MXFP4) | UE8M0 only |
+| Scale dtype | UE8M0 (MXFP4) or E4M3 (NVFP4) | UE8M0 only |
 | Block layout | TMEM-resident scale tile | VGPR-resident, refilled each K-step |
 | Mixed precision | Yes (via `kind::mxf8f6f4`) | Yes (`cbsz` ≠ `blgp`) |
 

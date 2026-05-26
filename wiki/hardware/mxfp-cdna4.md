@@ -14,7 +14,7 @@ aliases: [MXFP4, MXFP6, MXFP8, "OCP microscaling", "MX FP"]
 
 ## Overview
 
-CDNA 4 (gfx950) implements the OCP Microscaling (MX) format family natively in matrix-core hardware: MXFP4 (FP4 E2M1 + UE8M0 scale), MXFP6 (FP6 E2M3 or E3M2 + UE8M0 scale), MXFP8 (FP8 E4M3 or E5M2 + UE8M0 scale). These are bit-identical to NVIDIA Blackwell's NVFP4 (MXFP4 with UE8M0 scales), so quantization recipes transfer directly across vendors.
+CDNA 4 (gfx950) implements the OCP Microscaling (MX) format family natively in matrix-core hardware: MXFP4 (FP4 E2M1 + UE8M0 scale), MXFP6 (FP6 E2M3 or E3M2 + UE8M0 scale), MXFP8 (FP8 E4M3 or E5M2 + UE8M0 scale). These are bit-identical to MXFP4 as accepted by NVIDIA Blackwell's `kind::mxf8f6f4` path (NVFP4 is the separate FP4 + E4M3 scale variant exposed via `kind::mxf4nvf4`), so quantization recipes transfer directly across vendors.
 
 ## Storage Layout
 

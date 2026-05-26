@@ -46,7 +46,7 @@ __global__ void fused_gate_up_silu(...) {
 
 ## Constraints
 
-- TMEM capacity limits how many accumulators can fuse (256 cols total)
+- TMEM capacity limits how many accumulators can fuse (512 cols total)
 - Register pressure on epilogue if fusing complex activations
 - Fusion opportunities depend on dataflow shape (dependency graph must be DAG-compatible with CTA scope)
 

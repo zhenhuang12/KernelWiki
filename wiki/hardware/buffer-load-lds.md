@@ -63,7 +63,14 @@ __device__ void producer_load_k_tile(
         int g_off = (i * 64 + lane) * sizeof(float4);
         int l_off = lds_swizzle(i, lane) * sizeof(float4) + k_stage * STAGE_BYTES;
         // 128-bit per-lane direct-to-LDS load (CDNA 4)
-        __builtin_amdgcn_buffer_load_lds(rsrc, g_off, l_off, /*size=*/16);
+        __builtin_amdgcn_raw_buffer_load_lds(
+            rsrc,
+            /*lds_ptr =*/ (__attribute__((address_space(3))) void*)((char*)k_lds + l_off),
+            /*size    =*/ 16,   // bytes per lane; 16 on CDNA 4, 4 on CDNA 3
+            /*voffset =*/ g_off,
+            /*soffset =*/ 0,
+            /*offset  =*/ 0,
+            /*aux     =*/ 0);
     }
     // Producer issues all loads, then the consumer-handoff drain happens
     // at the next pipeline barrier:
