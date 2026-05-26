@@ -66,7 +66,7 @@ Architectural (days, per kernel):
 | `cp.async.commit_group` | (no analogue — `s_waitcnt` is in-order) | Counter-based, not group-based |
 | Cluster (`__cluster_dims__`) | none — XCD-aware tile scheduling | Software remap, no hardware cluster |
 | SM (132 on H100 SXM5, 148 on B200) | CU (304 on MI300X = 38/XCD × 8 XCDs, 256 on MI355X = 32/XCD × 8 XCDs) | Higher CU count, distributed across chiplets |
-| L2 (50 MB on H100 SXM5, ~100 MB across the two B200 dies) | L2 (4 MB per XCD × 8) + Infinity Cache (256 MB on MI300X) | Two-level on-package cache |
+| L2 (50 MB on H100 SXM5, 126 MB on B200) | L2 (4 MB per XCD × 8) + Infinity Cache (256 MB on MI300X) | Two-level on-package cache |
 
 ## Worked Example: WGMMA GEMM → MFMA GEMM
 

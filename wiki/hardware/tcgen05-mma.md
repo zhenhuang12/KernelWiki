@@ -34,7 +34,7 @@ Key differences from `wgmma`:
 
 ## Instruction Variants
 
-tcgen05.mma has 7 variants organized by precision and scaling mode:
+tcgen05.mma has 6 variants organized by precision and scaling mode:
 
 | Variant | A Type | B Type | Accumulator | Scale | MMA Shape (1SM) | Notes |
 |---|---|---|---|---|---|---|
@@ -42,9 +42,8 @@ tcgen05.mma has 7 variants organized by precision and scaling mode:
 | `tcgen05.mma.kind::tf32` | TF32 | TF32 | FP32 | None | m128n256k8 | Single-precision approximation |
 | `tcgen05.mma.kind::f8f6f4` | FP8/FP6/FP4 | FP8/FP6/FP4 | FP32 | None | m128n256k32 | Unscaled narrow precision (block-scaled variants are `mxf8f6f4` / `mxf4nvf4`) |
 | `tcgen05.mma.kind::i8` | INT8 | INT8 | INT32 | None | m128n256k32 | Integer quantized inference |
-| `tcgen05.mma.kind::mxf8` | MXFP8 | MXFP8 | FP32 | MX (E8M0) | m128n256k32 | Microscaling FP8 |
-| `tcgen05.mma.kind::mxf4` | MXFP4 | MXFP4 | FP32 | MX (E8M0) | m128n256k64 | Microscaling FP4 |
-| `tcgen05.mma.kind::mxf4nvf4` | NVFP4 | MXFP4 | FP32 | Mixed | m128n256k64 | Mixed NVFP4/MXFP4 |
+| `tcgen05.mma.kind::mxf8f6f4` | MXFP8 / MXFP6 / MXFP4 (mixed) | MXFP8 / MXFP6 / MXFP4 (mixed) | FP32 | MX (E8M0) | m128n256k32 | Block-scaled narrow precision (mixed MXFP8/MXFP6/MXFP4) |
+| `tcgen05.mma.kind::mxf4nvf4` | NVFP4 / MXFP4 | NVFP4 / MXFP4 | FP32 | Mixed (E8M0 / E4M3) | m128n256k64 | Block-scaled FP4 with NVFP4 scale variant |
 
 ## MMA Shapes: 1-SM vs 2-SM
 

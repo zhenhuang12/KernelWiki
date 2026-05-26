@@ -107,7 +107,7 @@ __global__ void sparse_mla_decode_kernel(
 
 | Variant | GPU | TFLOPS | Notes |
 |---------|-----|--------|-------|
-| Dense MLA decode | H800 | 660 | 3000 GB/s, compute-bound |
+| Dense MLA decode | H800 | 660 | 3000 GB/s, memory-bound |
 | Dense prefill | B200 | 1460 | tcgen05 peak |
 
 ### FP8
