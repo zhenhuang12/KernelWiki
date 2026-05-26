@@ -2,7 +2,7 @@
 id: blog-amd-flydsl
 title: "FlyDSL — AMD's Flexible Layout DSL for GPU Tile Programs"
 author: AMD Research
-url: https://github.com/AMD-AIG-AIMA/flydsl
+url: https://github.com/ROCm/FlyDSL
 source_category: community-note
 architectures:
 - cdna3
@@ -18,7 +18,7 @@ retrieved_at: 2026-04-27
 
 ## Summary
 
-[AMD-AIG-AIMA/flydsl](https://github.com/AMD-AIG-AIMA/flydsl) is AMD's research Python+MLIR DSL for authoring GPU tile programs targeting CDNA 3/4. Roughly the AMD analogue of NVIDIA's CuTe-DSL or Triton — Python front-end, layout-aware tile abstractions, lowers through MLIR (`amdgpu`, `rocdl`, `gpu` dialects) to AMDGCN.
+[ROCm/FlyDSL](https://github.com/ROCm/FlyDSL) is AMD's research Python+MLIR DSL for authoring GPU tile programs targeting CDNA 3/4. Roughly the AMD analogue of NVIDIA's CuTe-DSL or Triton — Python front-end, layout-aware tile abstractions, lowers through MLIR (`amdgpu`, `rocdl`, `gpu` dialects) to AMDGCN.
 
 ## Programming Model
 

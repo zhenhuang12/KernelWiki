@@ -16,7 +16,7 @@ aliases: [AGPR, "Accumulation VGPR", "acc VGPR", "accumulation register"]
 
 AGPRs (Accumulation VGPRs) are a second 32-bit register file class on CDNA, used exclusively as the destination of MFMA accumulators and the source/destination of `v_accvgpr_read_b32` / `v_accvgpr_write_b32`. The AGPR pool is *shared* with the regular VGPR pool.
 
-Sizing is **per SIMD per lane** (each CU has 4 SIMDs and each SIMD has 64 lanes; the figures below refer to one lane's view of one SIMD's register file):
+Sizing is **per SIMD per lane** (each CU has 4 SIMD16 units; a wave64 instruction issues over 4 cycles per SIMD, and each lane has its own VGPR/AGPR file. The figures below refer to one lane's view of one SIMD's register file):
 
 - CDNA 3 provides 512 VGPR-equivalent 32-bit registers per SIMD per lane.
 - On gfx90a the AGPR-addressable cap is 256 per wave; on gfx942 (CDNA 3) and gfx950 (CDNA 4) the VGPR/AGPR split is flexible, totaling 512 entries per SIMD per lane, with up to 256 addressable as AGPRs at single-wave-per-SIMD occupancy.

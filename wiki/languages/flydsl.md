@@ -15,7 +15,7 @@ aliases: [FlyDSL, "Flexible LaYout DSL", "AMD FlyDSL"]
 
 ## Overview
 
-[ROCm/FlyDSL](https://github.com/ROCm/FlyDSL) is AMD's MLIR-native Python DSL for authoring GPU tile programs. It exposes the `flir` / `fly` dialect on top of MLIR and targets gfx942 (CDNA 3), gfx950 (CDNA 4), gfx1250 (MI450 / future), and gfx1201 (RDNA 4). Roughly the AMD analogue of NVIDIA's CuTe-DSL or Triton: Python frontend, layout-aware tile abstractions, MLIR lowering through `flir` / `fly` / `amdgpu` / `rocdl` / `gpu` dialects, and finally AMDGCN.
+[ROCm/FlyDSL](https://github.com/ROCm/FlyDSL) is AMD's MLIR-native Python DSL for authoring GPU tile programs. It exposes the `fly` MLIR dialect (FlyROCDL is the companion C++ runtime/codegen side) and targets gfx942 (CDNA 3), gfx950 (CDNA 4), gfx1250 (MI450 / future), and gfx1201 (RDNA 4). Roughly the AMD analogue of NVIDIA's CuTe-DSL or Triton: Python frontend, layout-aware tile abstractions, MLIR lowering through `fly` / `amdgpu` / `rocdl` / `gpu` dialects, and finally AMDGCN.
 
 The repository ships runnable examples (the README lists `vectorAdd`, `tiledCopy`, `tiledMma`, and `preshuffle_gemm`) so it is more than a paper sketch. See also the AMD blog [FlyDSL: Expert GPU Kernel Development with the Ease of MLIR Python Native DSL on AMD GPUs](https://rocm.blogs.amd.com/software-tools-optimization/flydsl-python-native/README.html).
 

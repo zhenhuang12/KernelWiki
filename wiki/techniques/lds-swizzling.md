@@ -28,7 +28,7 @@ LDS bank        0 1 2 3 4 ... 31  0  1 ... 31  0 ...
 
 A 4 KB LDS region has 4096 / 4 = 1024 dwords spread across 32 banks, 32 dwords per bank. Two lanes whose dword indices differ by a multiple of 32 collide.
 
-For an MFMA `ds_read_b128` (4 dwords / lane × 64 lanes = 256 dwords per issue), the issue is split into 4 half-wave cycles of 32 lanes × 4 dwords each. Within one cycle, the 32 lanes must hit 32 distinct banks per dword position.
+For an MFMA `ds_read_b128` (4 dwords / lane × 64 lanes = 256 dwords per issue), the issue is split into 4 half-wave cycles of 32 lanes × 4 dwords each (this is an illustrative model of a wave64 DS access issued over 4 SIMD16 cycles; the exact bank-scheduling sequence depends on the access pattern and the LDS arbiter's per-cycle conflict resolution). Within one cycle, the 32 lanes must hit 32 distinct banks per dword position.
 
 ## The Conflict Pattern
 

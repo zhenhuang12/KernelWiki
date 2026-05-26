@@ -34,7 +34,7 @@ aliases: ["CK-Tile FP8 GEMM", "CK V3 pipeline FP8 GEMM"]
 
 ## Overview
 
-The V3 pipeline in CK-Tile is the canonical wave-specialized FP8 GEMM for MI300X. It pairs `buffer_load_dword_lds` producers with `v_mfma_f32_*_fp8_fp8` consumers, drives a 2-stage LDS double-buffer (the CDNA-3 LDS budget of 64 KB/CU caps stages at 2 for the typical 256×256×64 block tile), and reaches ~45-47% of MI300X peak FP8 throughput on square BF16-output GEMMs.
+The V3 pipeline in CK-Tile is the canonical wave-specialized FP8 GEMM for MI300X. It pairs `buffer_load_dword_lds` producers with `v_mfma_f32_*_fp8_fp8` consumers, drives a 2-stage LDS double-buffer (the CDNA-3 LDS budget of 64 KB/CU caps stages at 2 for the typical 256×256×64 block tile), and reaches ~45-47% of MI300X peak FP8 throughput on square BF16-output GEMMs. All measurements in `performance_claims` above use fp8 inputs with fp32 accumulation and bf16 output.
 
 Used in production by AITER's MoE GEMM, vLLM's AMD path, and ROCm/Megatron's FP8 training kernels.
 

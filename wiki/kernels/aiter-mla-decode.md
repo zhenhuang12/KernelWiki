@@ -44,7 +44,7 @@ For batch=128, seq=8192, head_dim=512:
 
 - KV cache traffic: `128 × 8192 × 512 × 2 (K+V latents) × 2 B = 2.0 GB / decode step` (BF16-element accounting; the FP8 KV path above halves this to ~1 GB).
 - MFMA compute: `128 × 128 × 8192 × 512 × 2 = 137 GFLOPs / decode step` (this counts only the Q·K phase; the attn·V phase doubles the work, so total ≈ 274 GFLOPs and AI ≈ 137 FLOPs/byte against the same 2 GB traffic).
-- Arithmetic intensity ≈ 137 / 2048 = 67 FLOPs/byte (Q·K only) or ≈ 137 FLOPs/byte (Q·K + attn·V) → HBM bound on MI300X either way. Roofline ridge points (BF16-specific analysis): FP8 = 2614.9 / 5.3 ≈ 493 FLOPs/byte; BF16 = 1307.4 / 5.3 ≈ 246 FLOPs/byte. MLA decode at 67-137 FLOPs/byte sits well below both — memory-bound.
+- Arithmetic intensity ≈ 137 GFLOPs / 2.0 GB ≈ 68.5 FLOPs/byte (Q·K only), or ≈ 274 GFLOPs / 2.0 GB ≈ 137 FLOPs/byte (Q·K + attn·V) → HBM bound on MI300X either way. Roofline ridge points (BF16-specific analysis): FP8 = 2614.9 / 5.3 ≈ 493 FLOPs/byte; BF16 = 1307.4 / 5.3 ≈ 246 FLOPs/byte. MLA decode at 68-137 FLOPs/byte sits well below both — memory-bound.
 
 So the win comes from *not wasting HBM bandwidth* — paged-KV access pattern, coalesced loads, and avoiding redundant K-cache reads across Q-tiles for the same sequence.
 
@@ -80,7 +80,10 @@ aiter::mla_decode(
 The MLA decode inner loop alternates two MFMA chains: one computing `Q·Kᵀ` (head_dim_qk = 576 → 9 MMAs of 64) and one computing `attention·V` (head_dim_v = 512 → 8 MMAs of 64). If the LLVM scheduler interleaves them naively, the AGPR accumulators for QK and PV collide and one spills to VGPR. AITER pins the boundary with an inline-asm `s_waitcnt lgkmcnt(0)` fence:
 
 ```cpp
-// Inside one KV-page iteration (consumer wave)
+// Inside one KV-page iteration (consumer wave).
+// kk advances 64 per iteration = 4 MFMA K-steps (4 × MFMA_K=16); the unrolled
+// body issues 4 back-to-back mfma_f32_32x32x16 ops over the 64-element ds_read
+// payload. Loop iteration count abbreviated for readability.
 #pragma unroll
 for (int kk = 0; kk < 576; kk += 64) {
     auto q  = ds_read_b128(smem_q + xor_swizzle(head, kk));

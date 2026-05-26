@@ -69,7 +69,7 @@ CDNA 3/4 support compute-partition (CPX) and memory-partition (DPX) modes that l
 | Level | Size | Scope | Bandwidth |
 |-------|------|-------|-----------|
 | L1 (vector) | 32 KB | Per-CU | per-CU peak |
-| L2 | 4 MB | Per-XCD | ~4 TB/s aggregate across 8 XCDs |
+| L2 | 4 MB | Per-XCD | ~4.3 TB/s per XCD (~34 TB/s aggregate across 8 XCDs) |
 | Infinity Cache (MALL) | 256 MB | Per-GPU | ~17 TB/s aggregate |
 | HBM3 / HBM3E | 192 GB / 288 GB | Per-GPU | 5.3 / 8.0 TB/s |
 

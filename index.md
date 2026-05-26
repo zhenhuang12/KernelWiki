@@ -131,8 +131,9 @@ See [references/examples.md](references/examples.md) for 10 worked query pattern
 | [ROCm/composable_kernel](queries/by-repo.md#rocmcomposable_kernel) | CK / CK-Tile production GEMM/FMHA on CDNA 3/4 |
 | [ROCm/aiter](queries/by-repo.md#rocmaiter) | AITER fused MoE / MLA / quantized inference kernels |
 | [ROCm/rccl](queries/by-repo.md#rocmrccl) | RCCL collectives (NCCL counterpart). RCCL active development at [ROCm/rocm-systems/projects/rccl](https://github.com/ROCm/rocm-systems/tree/main/projects/rccl); ROCm/rccl receives backport cherry-picks for stable branches. |
-| [ROCm/FlyDSL](queries/by-repo.md#rocmflydsl) | FlyDSL research DSL (Python + MLIR) |
-| [ROCm/mori](queries/by-repo.md#rocmmori) | MoE Expert-Parallel dispatch/combine library + shmem/RDMA primitives — GitHub tagline "Modular RDMA Interface" undersells the EP role. |
+| [ROCm/rocm-systems](queries/by-repo.md#rocmrocm-systems) | Active RCCL development (projects/rccl); ROCm/rccl receives backport cherry-picks for stable branches. |
+| ROCm/FlyDSL | FlyDSL research DSL (Python + MLIR) — no captured PRs yet. |
+| ROCm/mori | MoE Expert-Parallel dispatch/combine library + shmem/RDMA primitives — GitHub tagline "Modular RDMA Interface" undersells the EP role. No captured PRs yet. |
 
 ## Competitions
 

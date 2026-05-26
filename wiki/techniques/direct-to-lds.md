@@ -44,10 +44,12 @@ The producer wave needs only its address-computation registers; the operand regi
 
 ## Width per Architecture
 
-| Arch | Widest direct-to-LDS | Lanes per issue | Bytes per wave per issue |
-|------|----------------------|-----------------|---------------------------|
+| Arch | Widest direct-to-LDS | Lanes per issue [^lanes] | Bytes per wave per issue |
+|------|----------------------|---------------------------|---------------------------|
 | CDNA 3 (gfx942) | `buffer_load_dword_lds` | 64 | 256 |
 | CDNA 4 (gfx950) | `buffer_load_dwordx4_lds` | 64 | 1024 |
+
+[^lanes]: "Lanes per issue" reports the architectural wave64 lane count; the actual number of lanes that participate in any given issue is governed by the wave's EXEC mask, so a partially masked wave will move proportionally fewer bytes per issue.
 
 CDNA 4's 128-bit variant is a 4× per-issue bandwidth increase and is *the* reason CDNA 4 wave-specialized kernels can reach NVIDIA SM90-class arithmetic intensity.
 

@@ -8,7 +8,7 @@ confidence: source-reported
 reproducibility: snippet
 prerequisites: [hw-mfma, hw-lds, hw-buffer-load-lds, hw-agpr]
 related: [technique-wave-specialization, technique-direct-to-lds, technique-double-buffering, technique-register-budgeting, lang-amdgcn-asm]
-sources: [doc-amd-cdna3-isa, blog-rocm-mfma-tutorial, blog-rocm-buffer-load-lds, pr-composable-kernel-1384]
+sources: [doc-amd-cdna3-isa, doc-amd-cdna4-isa, blog-rocm-mfma-tutorial, blog-rocm-buffer-load-lds, pr-composable-kernel-1384]
 aliases: ["MFMA pipelining", "MFMA software pipeline", "K-stage MFMA pipeline"]
 symptoms: ["MFMA throughput well below peak", "high VGPR pressure with low occupancy", "compute-bound but not at roofline"]
 ---
@@ -17,7 +17,7 @@ symptoms: ["MFMA throughput well below peak", "high VGPR pressure with low occup
 
 ## Overview
 
-AMD MFMA instructions are synchronous — there is no async commit/wait model like NVIDIA's wgmma or tcgen05. ILP must come from interleaving MFMA against `ds_read` (LDS → VGPR staging) and `buffer_load_dwordx4_lds` (HBM → LDS prefetch). The technique of doing this explicitly via loop unrolling, AGPR double-buffering, and `__builtin_amdgcn_sched_barrier` is what AMD docs call MFMA pipelining.
+AMD MFMA instructions are synchronous — there is no async commit/wait model like NVIDIA's wgmma or tcgen05. ILP must come from interleaving MFMA against `ds_read` (LDS → VGPR staging) and `buffer_load_dwordx4_lds` (HBM → LDS prefetch; `buffer_load_dwordx4_lds` is CDNA 4 / gfx950 only, CDNA 3 / gfx942 has only the 32-bit `buffer_load_dword_lds` variant). The technique of doing this explicitly via loop unrolling, AGPR double-buffering, and `__builtin_amdgcn_sched_barrier` is what AMD docs call MFMA pipelining.
 
 A well-pipelined inner loop reaches 80-90% of peak MFMA throughput. A naive loop typically gets 30-50%.
 
@@ -88,7 +88,7 @@ for (int kk = 0; kk < BLOCK_K; kk += MFMA_K) {
 }
 ```
 
-This is the V3 CK-Tile pipeline pattern. The producer wave is independently issuing `buffer_load_dwordx4_lds`, so HBM latency is fully hidden by the consumer's MFMA loop.
+This is the V3 CK-Tile pipeline pattern. The producer wave is independently issuing `buffer_load_dwordx4_lds` (CDNA 4 / gfx950 only; on CDNA 3 / gfx942 the producer must issue four 32-bit `buffer_load_dword_lds` operations per 16 B chunk instead), so HBM latency is fully hidden by the consumer's MFMA loop.
 
 ## AGPR Pressure Management
 

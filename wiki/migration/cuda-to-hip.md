@@ -39,7 +39,9 @@ Mechanical (hours):
 
 Architectural (days, per kernel):
   [ ] MMA: wgmma / tcgen05.mma -> v_mfma_* via __builtin_amdgcn_mfma_*
-  [ ] Async global load: cp.async.bulk (TMA) -> buffer_load_dwordx4_lds (direct-to-LDS)
+  [ ] Async global load: cp.async.bulk (TMA) -> buffer_load_dwordx4_lds (direct-to-LDS;
+        CDNA 4 / gfx950 only — on CDNA 3 / gfx942 the widest direct-to-LDS is the 32-bit
+        buffer_load_dword_lds, so issue 4x as many loads)
   [ ] Mbarrier / commit/wait -> s_waitcnt vmcnt(0) + s_barrier
   [ ] Warp specialization -> wave specialization (no __syncwarp; use s_barrier)
   [ ] SMEM bank padding -> LDS XOR swizzle

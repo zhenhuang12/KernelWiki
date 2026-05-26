@@ -11,7 +11,7 @@
 | [Fine-Grained FP8/FP4 Quantization](../wiki/techniques/fine-grained-quantization.md) | fine-grained-quantization, fp8, fp4, nvfp4 | sm100, sm90 | source-reported | snippet | 3 |
 | [Kernel Fusion](../wiki/techniques/kernel-fusion.md) | kernel-fusion, fused-kernel, tmem | sm100, sm90 | source-reported | snippet | 3 |
 | [LDS XOR Swizzling on AMD CDNA](../wiki/techniques/lds-swizzling.md) | lds-swizzling, lds, mfma, ds-read | cdna3, cdna4 | source-reported | snippet | 5 |
-| [MFMA Software Pipelining on AMD CDNA](../wiki/techniques/mfma-pipelining.md) | mfma-pipelining, mfma, lds, buffer-load-lds | cdna3, cdna4 | source-reported | snippet | 4 |
+| [MFMA Software Pipelining on AMD CDNA](../wiki/techniques/mfma-pipelining.md) | mfma-pipelining, mfma, lds, buffer-load-lds | cdna3, cdna4 | source-reported | snippet | 5 |
 | [PTX Cache Policy Differentiation](../wiki/techniques/cache-policy.md) | cache-policy, vectorized-loads | sm100, sm90 | source-reported | snippet | 4 |
 | [Persistent Kernels with CLC](../wiki/techniques/persistent-kernels.md) | persistent-kernel, clc, tile-scheduling | sm100 | source-reported | snippet | 3 |
 | [Ping-Pong Scheduling](../wiki/techniques/ping-pong-scheduling.md) | ping-pong-scheduling, warp-specialization, tmem, pipeline-stages | sm100 | source-reported | snippet | 3 |
