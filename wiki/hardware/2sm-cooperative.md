@@ -23,7 +23,7 @@ TPC (Two Processing Clusters)
 │   └── TMEM (columns 0-255)
 └── SM 1: CTA 1 — cooperates on same MMA
     ├── Shared Memory A (rows 128-255)
-    └── TMEM (columns 256-511)
+    └── TMEM (M rows 128-255, own 128×256 tile)
 ```
 
 ## PTX

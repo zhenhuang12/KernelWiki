@@ -75,7 +75,7 @@ gemm_wave_specialized(const bf16* A, const bf16* B, float* C,
             for (int kk = 0; kk < BLOCK_K; kk += MFMA_K) {
                 auto a = lds_read_b128(smem_a[stage], wave_id, lane, kk);
                 auto b = lds_read_b128(smem_b[stage], wave_id, lane, kk);
-                acc = __builtin_amdgcn_mfma_f32_32x32x16bf16(a, b, acc, 0, 0, 0);
+                acc = __builtin_amdgcn_mfma_f32_32x32x8bf16(a, b, acc, 0, 0, 0);
             }
 
             __syncthreads();   // release stage back to producers

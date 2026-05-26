@@ -81,7 +81,7 @@ float cuda_core_acc[TILE_M][TILE_N] = {0};  // FP32 accumulator on CUDA Cores
 
 for (int k = 0; k < K; k += Nc) {
     // Run 4 consecutive WGMMAs with TC-limited precision accumulation
-    __half2 tc_acc[TILE_M][WGMMA_N];  // Tensor Core accumulator (~FP22)
+    __half2 tc_acc[TILE_M][WGMMA_N];  // placeholder for the actual TC accumulator path; the real intermediate format is the TC's FP22-equivalent partial-product representation, not literal __half2
     memset(tc_acc, 0, sizeof(tc_acc));
 
     for (int sub_k = 0; sub_k < Nc; sub_k += WGMMA_K) {

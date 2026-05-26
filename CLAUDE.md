@@ -117,4 +117,4 @@ performance_claims:
 - **First-class DSLs**: CuTe DSL, CUDA C++, PTX, Triton (NVIDIA); HIP, Composable Kernel (CK / CK-Tile), AMDGCN inline asm, FlyDSL (AMD). Others mentioned but no dedicated pages.
 - **Source repositories**:
   - NVIDIA stack: cutlass, sglang, vllm, flashinfer, pytorch, DeepGEMM
-  - AMD stack: ROCm/composable_kernel, ROCm/aiter, ROCm/mori (MoE Expert-Parallel dispatch/combine library + shmem/RDMA primitives — GitHub tagline "Modular RDMA Interface" undersells the EP role; no captured PRs yet), ROCm/FlyDSL (no captured PRs yet), ROCm/rccl (note: active RCCL development at ROCm/rocm-systems/projects/rccl; ROCm/rccl receives backport cherry-picks for stable branches)
+  - AMD stack: ROCm/composable_kernel (note: deprecated; active development moved to ROCm/rocm-libraries), ROCm/aiter, ROCm/mori (MoE Expert-Parallel dispatch/combine library + shmem/RDMA primitives — GitHub tagline "Modular RDMA Interface" undersells the EP role; no captured PRs yet), ROCm/FlyDSL (no captured PRs yet), ROCm/rccl (note: active RCCL development at ROCm/rocm-systems/projects/rccl; ROCm/rccl receives backport cherry-picks for stable branches)

@@ -21,6 +21,8 @@ retrieved_at: 2026-04-27
 
 [ROCm/rccl](https://github.com/ROCm/rccl) is the AMD analogue of NVIDIA NCCL — a multi-GPU/multi-node collective library implementing `AllReduce`, `AllGather`, `ReduceScatter`, `Broadcast`, `AllToAll`, `Send`/`Recv`, and grouped variants. RCCL is API-compatible with NCCL (same `ncclXxx` symbols in many transitional builds; native `rcclXxx` aliases also exported), so most CUDA distributed code ports cleanly.
 
+Note: active RCCL development is now in [ROCm/rocm-systems/projects/rccl](https://github.com/ROCm/rocm-systems/tree/main/projects/rccl); ROCm/rccl receives backport cherry-picks for stable branches.
+
 ## Key Differences vs NCCL
 
 - **Transport**: xGMI (Infinity Fabric) for intra-node, RDMA over RoCE / Slingshot for inter-node. No NVLink/NVSwitch.

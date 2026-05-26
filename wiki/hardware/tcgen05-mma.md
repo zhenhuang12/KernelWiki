@@ -40,7 +40,7 @@ tcgen05.mma has 7 variants organized by precision and scaling mode:
 |---|---|---|---|---|---|---|
 | `tcgen05.mma.kind::f16` | FP16/BF16 | FP16/BF16 | FP32 | None | m128n256k16 | Standard half-precision |
 | `tcgen05.mma.kind::tf32` | TF32 | TF32 | FP32 | None | m128n256k8 | Single-precision approximation |
-| `tcgen05.mma.kind::f8f6f4` | FP8/FP6/FP4 | FP8/FP6/FP4 | FP32 | Block (UE8M0) | m128n256k32 | Narrow precision with native block scaling |
+| `tcgen05.mma.kind::f8f6f4` | FP8/FP6/FP4 | FP8/FP6/FP4 | FP32 | None | m128n256k32 | Unscaled narrow precision (block-scaled variants are `mxf8f6f4` / `mxf4nvf4`) |
 | `tcgen05.mma.kind::i8` | INT8 | INT8 | INT32 | None | m128n256k32 | Integer quantized inference |
 | `tcgen05.mma.kind::mxf8` | MXFP8 | MXFP8 | FP32 | MX (E8M0) | m128n256k32 | Microscaling FP8 |
 | `tcgen05.mma.kind::mxf4` | MXFP4 | MXFP4 | FP32 | MX (E8M0) | m128n256k64 | Microscaling FP4 |

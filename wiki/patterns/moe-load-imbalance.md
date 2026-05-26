@@ -31,7 +31,7 @@ MoE grouped GEMM shows uneven per-expert compute time. Some SMs finish their exp
 | [Contiguous layout](../kernels/grouped-gemm.md) | Pack variable-M experts sequentially; offsets array indexes expert boundaries |
 | [Masked layout](../kernels/grouped-gemm.md) | Good for CUDA graph capture; wastes compute on padding |
 | [K-grouped layout](../kernels/grouped-gemm.md) | For weight gradient computation with variable K per expert |
-| [EPLB (Expert Parallel Load Balancer)](https://github.com/deepseek-ai/EPLB) | Replicate heavy experts across GPUs; 1.49x prefill speedup, 2.54x decode |
+| [EPLB (Expert Parallel Load Balancer)](https://github.com/deepseek-ai/EPLB) (out of scope; included for context only) | Replicate heavy experts across GPUs; 1.49x prefill speedup, 2.54x decode |
 
 ## Example: Reward Hack in GPU Mode Problem 4
 

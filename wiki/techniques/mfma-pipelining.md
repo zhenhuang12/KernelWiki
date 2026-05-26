@@ -94,7 +94,7 @@ This is the V3 CK-Tile pipeline pattern. The producer wave is independently issu
 
 A 32×32×16 BF16 MFMA writes 16 AGPRs per lane. If your wave runs 4 such MFMAs in flight (4-stage AGPR pipeline), that's 64 AGPRs/lane just for accumulators — out of the shared 512-register total. Two strategies:
 
-- **Smaller MFMA (16×16×16)**: 4 AGPRs/lane per MMA → 4-stage pipeline costs 16 AGPRs, leaves 496 VGPRs.
+- **Smaller MFMA (16×16×16)**: 4 AGPRs/lane per MMA → 4-stage pipeline costs 16 AGPRs, leaves 496 entries in the unified VGPR/AGPR pool (≤256 addressable as VGPRs and ≤256 as AGPRs).
 - **Single-buffered AGPR + tight scope**: keep one accumulator live, copy to VGPR at epilogue. Highest peak throughput but no MFMA-MFMA overlap.
 
 CK-Tile picks per-shape automatically; hand-rolled HIP kernels should measure with `rocprofv3 --pmc SQ_VGPR_LANE_RATIO,SQ_INSTS_VALU_MFMA`.
@@ -118,7 +118,7 @@ CK-Tile picks per-shape automatically; hand-rolled HIP kernels should measure wi
 | 0x0200 | DS write instructions may cross |
 | 0x0400 | transcendental instructions may cross |
 
-Bits combine with bitwise OR. To protect an MFMA inner loop from being polluted by global-memory ops while still letting LDS traffic and MFMAs reorder, use `__builtin_amdgcn_sched_barrier(0x0008 | 0x0100 | 0x0200)` — i.e. `0x308`, which permits MFMAs and DS reads/writes to cross but pins all VMEM and VALU/SALU operations in place. (The legacy combination `0x60` shown in older blog posts maps to "VMEM-write + all-DS" under the canonical mask and is rarely what callers actually want.)
+Bits combine with bitwise OR. To protect an MFMA inner loop from being polluted by global-memory ops while still letting LDS traffic and MFMAs reorder, use `__builtin_amdgcn_sched_barrier(0x0008 | 0x0100 | 0x0200)` — i.e. `0x308`, which permits MFMAs and DS reads/writes to cross but pins all VMEM and VALU/SALU operations in place. (The legacy combination `0x60` shown in older blog posts decodes as `0x40 | 0x20` = VMEM write (0x40) | VMEM read (0x20) under the canonical mask — note `all-DS` is 0x80, not part of 0x60 — and is rarely what callers actually want.)
 
 ## Caveats
 

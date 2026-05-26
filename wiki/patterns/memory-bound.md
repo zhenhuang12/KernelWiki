@@ -24,8 +24,8 @@ Nsight Compute shows high DRAM throughput but low tensor core utilization. Arith
 | Technique | Effect |
 |---|---|
 | [Vectorized loads](../techniques/vectorized-loads.md) | 128/256-bit loads maximize bandwidth utilization |
-| [Cache policies](../techniques/vectorized-loads.md) | L1::no_allocate for streaming, L1::evict_last for reuse |
-| [Register budgeting](../techniques/vectorized-loads.md) | -maxrregcount increases occupancy |
+| [Cache policies](../techniques/cache-policy.md) | L1::no_allocate for streaming, L1::evict_last for reuse |
+| [Register budgeting](../techniques/register-budgeting.md) | -maxrregcount increases occupancy |
 | [TMA multicast](../hardware/tma.md) | Share loaded data across SMs in cluster |
 | [Swizzling](../techniques/swizzling.md) | Eliminate bank conflicts in shared memory |
 

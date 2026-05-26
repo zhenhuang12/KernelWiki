@@ -250,7 +250,6 @@ def fused_moe_gate_up_triton(
 | Framework | Batch 4096 TFLOPS | Batch 1 Latency | Kernel Launches |
 |-----------|-------------------|-----------------|-----------------|
 | SGLang | 1262 | 206.9us | 5 (fused) |
-| FlashInfer CuTe DSL | 1225 | 481.9us | 1-2 (fully fused) |
 | vLLM | 1117 | 369.5us | 7 (unfused) |
 
 ## Challenges

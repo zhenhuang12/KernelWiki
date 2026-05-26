@@ -29,7 +29,7 @@ export BLACKWELL_WIKI_ROOT=/path/to/KernelWiki
 
 ## What's Here
 
-- **2,179+ PR references** from NVIDIA/cutlass, sgl-project/sglang, vllm-project/vllm, flashinfer-ai/flashinfer, pytorch/pytorch, deepseek-ai/DeepGEMM, ROCm/composable_kernel, ROCm/aiter, ROCm/mori (MoE Expert-Parallel dispatch/combine library + shmem/RDMA primitives — GitHub tagline "Modular RDMA Interface" undersells the EP role), ROCm/FlyDSL, ROCm/rccl (note: active RCCL development at [ROCm/rocm-systems/projects/rccl](https://github.com/ROCm/rocm-systems/tree/main/projects/rccl); ROCm/rccl receives backport cherry-picks for stable branches) — Jan 2025 – Apr 2026
+- **2,179+ PR references** from NVIDIA/cutlass, sgl-project/sglang, vllm-project/vllm, flashinfer-ai/flashinfer, pytorch/pytorch, deepseek-ai/DeepGEMM, ROCm/composable_kernel (note: deprecated; active development moved to ROCm/rocm-libraries), ROCm/aiter, ROCm/mori (MoE Expert-Parallel dispatch/combine library + shmem/RDMA primitives — GitHub tagline "Modular RDMA Interface" undersells the EP role), ROCm/FlyDSL, ROCm/rccl (note: active RCCL development at [ROCm/rocm-systems/projects/rccl](https://github.com/ROCm/rocm-systems/tree/main/projects/rccl); ROCm/rccl receives backport cherry-picks for stable branches) — Jan 2025 – Apr 2026
 - **Dual-architecture wiki coverage** — NVIDIA SM90/SM100 (tcgen05, TMEM, CLC, TMA, NVFP4, warp-spec) and AMD CDNA 3/4 (MFMA, AGPR, LDS, `buffer_load_*_lds`, XCD, Infinity Cache, MXFP4/6/8, wave-spec) on the same schema
 - **Synthesized wiki pages** — hardware features, techniques, kernel case studies, problem patterns, DSL guides (CuTe DSL / CUDA C++ / PTX / Triton / HIP / CK-Tile / AMDGCN / FlyDSL), migration guides (wgmma→tcgen05, register→TMEM, CUDA→HIP)
 - **Community blog summaries** (ROCm Blogs, GPUOpen, NVIDIA Developer), **official doc summaries** (CDNA 3/4 whitepapers & ISAs, ROCm/HIP docs), **competition pages**
@@ -118,7 +118,7 @@ python3 scripts/generate-indices.py    # regenerate query indices
 - **First-class DSLs** — CuTe DSL, CUDA C++, PTX, Triton (NVIDIA); HIP, Composable Kernel (CK / CK-Tile), AMDGCN inline asm, FlyDSL (AMD). Others mentioned but no dedicated pages.
 - **Source repositories** —
   - NVIDIA stack: cutlass, sglang, vllm, flashinfer, pytorch, DeepGEMM
-  - AMD stack: ROCm/composable_kernel, ROCm/aiter, ROCm/mori (MoE Expert-Parallel dispatch/combine library + shmem/RDMA primitives — GitHub tagline "Modular RDMA Interface" undersells the EP role; no captured PRs yet), ROCm/FlyDSL (no captured PRs yet), ROCm/rccl (note: active RCCL development at ROCm/rocm-systems/projects/rccl; ROCm/rccl receives backport cherry-picks for stable branches)
+  - AMD stack: ROCm/composable_kernel (note: deprecated; active development moved to ROCm/rocm-libraries), ROCm/aiter, ROCm/mori (MoE Expert-Parallel dispatch/combine library + shmem/RDMA primitives — GitHub tagline "Modular RDMA Interface" undersells the EP role; no captured PRs yet), ROCm/FlyDSL (no captured PRs yet), ROCm/rccl (note: active RCCL development at ROCm/rocm-systems/projects/rccl; ROCm/rccl receives backport cherry-picks for stable branches)
 
 ## Repository Layout
 

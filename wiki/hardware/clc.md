@@ -82,7 +82,7 @@ __global__ void persistent_gemm_clc(
             asm volatile(
                 "{\n"
                 "  .reg .pred p;\n"
-                "  clusterlaunchcontrol.try_cancel {%0, %1}, p;\n"
+                "  clusterlaunchcontrol.try_acquire {%0, %1}, p;\n"
                 "  selp.s32 %2, 1, 0, p;\n"
                 "}\n"
                 : "=r"(result.x), "=r"(result.y), "=r"(acquired)

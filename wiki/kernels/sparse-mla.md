@@ -103,13 +103,20 @@ __global__ void sparse_mla_decode_kernel(
 
 ## Performance
 
+### BF16
+
 | Variant | GPU | TFLOPS | Notes |
 |---------|-----|--------|-------|
-| Dense MLA decode | H800 | 660 (BF16) | 3000 GB/s, compute-bound |
-| Sparse MLA decode | H800 | 410 (FP8) | Token-level sparsity |
-| Sparse MLA decode | B200 | 350 (FP8) | Lower because bandwidth dominates decode |
-| Dense prefill | B200 | 1460 (BF16) | tcgen05 peak |
-| Sparse prefill | B200 | 1450 (FP8) | FP8 sparse matches BF16 dense |
+| Dense MLA decode | H800 | 660 | 3000 GB/s, compute-bound |
+| Dense prefill | B200 | 1460 | tcgen05 peak |
+
+### FP8
+
+| Variant | GPU | TFLOPS | Notes |
+|---------|-----|--------|-------|
+| Sparse MLA decode | H800 | 410 | Token-level sparsity |
+| Sparse MLA decode | B200 | 350 | Lower because bandwidth dominates decode (FP8 decode is HBM-bound on both, and B200's per-SM HBM bandwidth scaling is below H800's for this shape) |
+| Sparse prefill | B200 | 1450 | FP8 sparse matches BF16 dense |
 
 ## When To Use
 

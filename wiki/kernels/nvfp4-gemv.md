@@ -224,7 +224,8 @@ Documented progression from Yue's hackathon blog:
 | Stage | Technique | Latency |
 |-------|-----------|---------|
 | CuTe DSL baseline | Basic CuTe partition/copy | ~100us |
-| Coalesced access | Fix memory access patterns | 443us -> 39us |
+| Uncoalesced access (regression) | Naive memory access pattern | 443us |
+| Coalesced access | Fix memory access patterns | 39us |
 | Hardware intrinsics | cvt.rn.f16x2.e2m1x2 | ~39us |
 | PTX assembly | Full PTX with byte unpacking | ~27us |
 | ILP optimization | Instruction-level parallelism | ~22.9us |

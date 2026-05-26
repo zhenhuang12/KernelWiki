@@ -42,11 +42,14 @@ __device__ void producer_load_kv_tile(
 ) {
     const int lane = threadIdx.x % 64;
     // Each lane streams one float4 (128 bits) directly into LDS.
-    __builtin_amdgcn_buffer_load_lds(
+    __builtin_amdgcn_raw_buffer_load_lds(
         /*rsrc=*/__builtin_amdgcn_make_buffer_rsrc(k_ptr, /*stride=*/0, /*num_records=*/INT_MAX, /*flags=*/0),
-        /*offset=*/lane * sizeof(float4),
-        /*lds_offset=*/lane * sizeof(float4),
-        /*size=*/16);
+        /*lds_ptr=*/k_lds,
+        /*size=*/16,
+        /*voffset=*/lane * sizeof(float4),
+        /*soffset=*/0,
+        /*offset=*/0,
+        /*aux=*/0);
     // Issue, then drain at the consumer-handoff barrier:
     __builtin_amdgcn_s_waitcnt(0);
     __syncthreads();

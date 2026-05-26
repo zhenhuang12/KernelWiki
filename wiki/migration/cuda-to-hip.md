@@ -47,7 +47,7 @@ Architectural (days, per kernel):
   [ ] SMEM bank padding -> LDS XOR swizzle
   [ ] Output tile scheduling -> XCD-aware blockIdx.x remap
   [ ] Tile sizes: 128x128x32 (Hopper) -> 256x256x64 (CDNA 3) / 256x256x128 (CDNA 4)
-  [ ] Register accumulators in VGPR -> AGPR (16 per 32x32x16 MFMA)
+  [ ] Register accumulators in VGPR -> AGPR (16 per 32x32x8 MFMA on CDNA 3; 16 per 32x32x16 MFMA on CDNA 4)
 ```
 
 ## Concept Mapping
@@ -131,10 +131,10 @@ __global__ void __launch_bounds__(256) gemm_cdna3(
         for (int k = 0, stage = 0; k < K; k += 64, stage ^= 1) {
             __syncthreads();
             #pragma unroll
-            for (int kk = 0; kk < 64; kk += 16) {
+            for (int kk = 0; kk < 64; kk += 8) {
                 auto a = ds_read_b128(smem_a[stage], wave, lane, kk);
                 auto b = ds_read_b128(smem_b[stage], wave, lane, kk);
-                acc = __builtin_amdgcn_mfma_f32_32x32x16bf16(a, b, acc, 0, 0, 0);
+                acc = __builtin_amdgcn_mfma_f32_32x32x8bf16(a, b, acc, 0, 0, 0);
             }
             __syncthreads();
         }

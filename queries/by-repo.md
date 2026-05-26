@@ -63,7 +63,7 @@
 | [#2731](../sources/prs/composable_kernel/PR-2731.md) | [CK_TILE] Add FAv3 fwd pipeline | 2025-09-01 | wave-specialization, mfma-pipelining | flash-attention, attention, composable-kernel |
 | [#2488](../sources/prs/composable_kernel/PR-2488.md) | MX GEMM - Add FP6 GEMM Test | 2025-07-11 | mfma-pipelining, fine-grained-quantization | gemm, mxfp6, block-scale |
 | [#2110](../sources/prs/composable_kernel/PR-2110.md) | [CK_TILE] support gfx950 matrix core in 01_fmha fwd | 2025-04-23 | mfma-pipelining | flash-attention, attention, composable-kernel |
-| [#1853](../sources/prs/composable_kernel/PR-1853.md) | CK Tile GEMM Compute V2 (2 LDS Ping Pong mechanism) | 2025-02-12 | mfma-pipelining, double-buffering, wave-specialization | gemm, composable-kernel, mfma |
+| [#1853](../sources/prs/composable_kernel/PR-1853.md) | CK Tile GEMM Compute V2 (2 LDS Ping Pong mechanism) | 2025-02-12 | mfma-pipelining, double-buffering | gemm, composable-kernel, mfma |
 | [#1384](../sources/prs/composable_kernel/PR-1384.md) | [GEMM] F8 GEMM, performance optimized | 2024-07-19 | mfma-pipelining | gemm, fp8, composable-kernel |
 
 <a id="rocmrccl"></a>

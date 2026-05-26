@@ -93,6 +93,8 @@ See [references/examples.md](references/examples.md) for 10 worked query pattern
 - [pattern-register-pressure](wiki/patterns/register-pressure.md) — Too many registers → low occupancy
 - [pattern-compute-bound](wiki/patterns/compute-bound.md) — Not reaching peak FLOPS
 - [pattern-tail-effect](wiki/patterns/tail-effect.md) — Last wave underutilizes GPU
+- [pattern-moe-load-imbalance](wiki/patterns/moe-load-imbalance.md) — Expert token-count skew starves SMs/CUs
+- [pattern-pipeline-stalls](wiki/patterns/pipeline-stalls.md) — Producer/consumer pipeline bubbles drop throughput
 
 ## Languages & DSLs
 
@@ -124,11 +126,12 @@ See [references/examples.md](references/examples.md) for 10 worked query pattern
 | [vllm-project/vllm](queries/by-repo.md#vllm-projectvllm) | vLLM Blackwell support |
 | [flashinfer-ai/flashinfer](queries/by-repo.md#flashinfer-aiflashinfer) | FlashInfer Blackwell kernels |
 | [pytorch/pytorch](queries/by-repo.md#pytorchpytorch) | PyTorch/Inductor Blackwell |
+| [deepseek-ai/DeepGEMM](queries/by-repo.md#deepseek-aideepgemm) | DeepGEMM FP8/FP4 GEMM + Mega MoE on Hopper/Blackwell |
 
 ### AMD stack
 | Repository | Focus |
 |---|---|
-| [ROCm/composable_kernel](queries/by-repo.md#rocmcomposable_kernel) | CK / CK-Tile production GEMM/FMHA on CDNA 3/4 |
+| [ROCm/composable_kernel](queries/by-repo.md#rocmcomposable_kernel) | CK / CK-Tile production GEMM/FMHA on CDNA 3/4 (note: ROCm/composable_kernel is deprecated; active development moved to ROCm/rocm-libraries) |
 | [ROCm/aiter](queries/by-repo.md#rocmaiter) | AITER fused MoE / MLA / quantized inference kernels |
 | [ROCm/rccl](queries/by-repo.md#rocmrccl) | RCCL collectives (NCCL counterpart). RCCL active development at [ROCm/rocm-systems/projects/rccl](https://github.com/ROCm/rocm-systems/tree/main/projects/rccl); ROCm/rccl receives backport cherry-picks for stable branches. |
 | [ROCm/rocm-systems](queries/by-repo.md#rocmrocm-systems) | Active RCCL development (projects/rccl); ROCm/rccl receives backport cherry-picks for stable branches. |

@@ -3,7 +3,7 @@ id: hw-nvfp4
 title: "NVFP4 and Block-Scaled Narrow Precision"
 type: hardware
 architectures: [sm100, sm100a]
-tags: [nvfp4, fp4, block-scale, fp8, fp6]
+tags: [nvfp4, fp4, block-scale, fp8]
 confidence: source-reported
 related: [technique-fine-grained-quantization, kernel-nvfp4-gemm, kernel-nvfp4-gemv, hw-tcgen05-mma]
 sources: [doc-nvidia-tuning-guide, contest-gpumode-p1, contest-gpumode-p2, blog-yue-nvfp4]
@@ -29,10 +29,10 @@ Dequantization: x_hat_i = s_global * s_block * deq_FP4(q_i)
 
 ## tcgen05 Variants for FP4
 
-| Variant | Description | Throughput vs Hopper |
+| Variant | Description | Throughput |
 |---|---|---|
-| `tcgen05.mma.mxf4.block_scale` | MX FP4 with block scaling | **4×** |
-| `tcgen05.mma.mxf4nvf4.block_scale` | NVFP4 + MX FP4 flexible scaling | **4×** |
+| `tcgen05.mma.mxf4.block_scale` | MX FP4 with block scaling | **4× vs Hopper FP8 peak** |
+| `tcgen05.mma.mxf4nvf4.block_scale` | NVFP4 + MX FP4 flexible scaling | **4× vs Hopper FP8 peak** |
 
 ## PTX for FP4 Conversion
 

@@ -34,7 +34,7 @@ aliases: ["CK-Tile MXFP4 GEMM", "MI355X MXFP4 GEMM", "CDNA 4 block-scaled GEMM"]
 
 ## Overview
 
-CDNA 4 (gfx950) adds `v_mfma_scale_f32_32x32x64_f8f6f4` and `v_mfma_scale_f32_16x16x128_f8f6f4` — block-scaled MFMAs that consume two UE8M0 scale streams (cbsz for A, blgp for B) alongside the f8/f6/f4 operand streams. CK-Tile's MXFP4 GEMM wires those into the V3 wave-specialized pipeline plus a third producer stream for the scales, reaching ~4.7 PFLOPS on a 8192³ MXFP4 GEMM (about 47% of MI355X dense MXFP4 peak ~10.07 PFLOPS; ~23% of the ~20.1 PFLOPS sparse peak).
+CDNA 4 (gfx950) adds `v_mfma_scale_f32_32x32x64_f8f6f4` and `v_mfma_scale_f32_16x16x128_f8f6f4` — block-scaled MFMAs that consume two UE8M0 scale streams (cbsz for A, blgp for B) alongside the f8/f6/f4 operand streams. CK-Tile's MXFP4 GEMM wires those into the V3 wave-specialized pipeline plus a third producer stream for the scales, reaching ~4.7 PFLOPS on a 8192³ MXFP4 GEMM (about 47% of MI355X dense MXFP4 peak ~10.07 PFLOPS; ~23% of the ~20.1 PFLOPS sparse peak (2:4 structured sparsity peak; see MI355X datasheet)).
 
 This is the AMD analogue of NVIDIA's NVFP4 GEMM with tcgen05.mma block scaling (see [kernel-nvfp4-gemm](nvfp4-gemm.md)).
 

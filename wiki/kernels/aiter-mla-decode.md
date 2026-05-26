@@ -1,6 +1,6 @@
 ---
 id: kernel-aiter-mla-decode
-title: "AITER MLA Decode Kernel on CDNA 3"
+title: "AITER MLA Decode Kernel on CDNA 3 / CDNA 4"
 type: kernel
 architectures: [cdna3, cdna4]
 tags: [mla, attention, decode, paged-attention, mfma, lds, buffer-load-lds, wave-specialization, fine-grained-quantization]
@@ -30,13 +30,13 @@ performance_claims:
 aliases: ["AITER MLA decode", "ROCm MLA decode", "AMD FlashMLA decode"]
 ---
 
-# AITER MLA Decode Kernel on CDNA 3
+# AITER MLA Decode Kernel on CDNA 3 / CDNA 4
 
 ## Overview
 
 AITER's MLA decode kernel is the ROCm production decode-path for DeepSeek-V2/V3 multi-head latent attention on MI300X (with CDNA 4 forward-compatibility). It implements the latent-projection variant where the KV cache stores compressed latents (head_dim=512 + 64 rope) instead of full K and V, and reconstructs Q·K and attention·V on-chip.
 
-The kernel reaches ~80-87% of MI300X HBM bandwidth on long-context decode, matching FlashMLA on H200 for the same shape. The HBM-bound regime means MFMA pipelining matters less than (a) careful paged-KV layout, (b) avoiding `ds_read` bank conflicts, and (c) the QK fence pattern that lets the AMDGPU LLVM scheduler interleave the two MFMA groups.
+The kernel reaches ~80-87% of MI300X HBM bandwidth on long-context decode, matching FlashMLA on H800 for the same shape. The HBM-bound regime means MFMA pipelining matters less than (a) careful paged-KV layout, (b) avoiding `ds_read` bank conflicts, and (c) the QK fence pattern that lets the AMDGPU LLVM scheduler interleave the two MFMA groups.
 
 ## Why MLA Decode is HBM-bound
 

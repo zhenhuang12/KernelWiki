@@ -88,7 +88,7 @@ __device__ void direct_to_lds_load_tile(
     __builtin_amdgcn_raw_buffer_load_lds(
         /*rsrc    =*/ make_buffer_rsrc(g),
         /*lds_ptr =*/ (__attribute__((address_space(3))) void*)(&__lds_base[lds_off]),
-        /*size    =*/ 16,          // bytes per lane (1, 2, 4, 12, or 16); 16 on CDNA 4, 4 on CDNA 3
+        /*size    =*/ 16,          // bytes per lane (1, 2, 4, 12, or 16); 16 on CDNA 4, 4 on CDNA 3; size=12 is CDNA 4 only
         /*voffset =*/ 0,
         /*soffset =*/ 0,
         /*offset  =*/ 0,

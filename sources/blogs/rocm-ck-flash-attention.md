@@ -35,4 +35,4 @@ ROCm Blogs walk-through of the CK-Tile FlashAttention-2 forward kernel on MI300X
 
 ## Why It Matters
 
-This is the canonical worked example of a wave-specialized attention pipeline on CDNA 3, and the upstream pattern that AITER's production attention kernels are derived from. Cited by [kernel-aiter-mla](../../wiki/kernels/aiter-mla.md), [technique-wave-specialization](../../wiki/techniques/wave-specialization.md).
+This is the canonical worked example of a wave-specialized attention pipeline on CDNA 3, and the upstream pattern that AITER's production attention kernels are derived from. Cited by [kernel-aiter-mla-decode](../../wiki/kernels/aiter-mla-decode.md), [technique-wave-specialization](../../wiki/techniques/wave-specialization.md).

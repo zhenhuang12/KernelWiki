@@ -279,7 +279,7 @@ From published Blackwell microbenchmarks:
 
 | Metric | TMEM | SMEM | Registers |
 |---|---|---|---|
-| End-to-end latency (cache miss) | ~420 cycles | ~30 cycles | ~4 cycles |
+| End-to-end latency (first access) | ~420 cycles | ~30 cycles | ~4 cycles |
 | Bandwidth for large working sets | High (dedicated bus) | Medium | N/A (limited count) |
 | Best for | Multi-stage tensor pipelines | Single-shot small matrix | Scalar/vector ALU |
 

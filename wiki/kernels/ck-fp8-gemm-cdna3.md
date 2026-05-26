@@ -42,7 +42,7 @@ Used in production by AITER's MoE GEMM, vLLM's AMD path, and ROCm/Megatron's FP8
 
 | Parameter | Value | Reason |
 |-----------|-------|--------|
-| BLOCK_M × BLOCK_N | 256 × 256 | Fills 2 waves of 32×32 MFMA across M, 8 across N |
+| BLOCK_M × BLOCK_N | 256 × 256 | 2×2 wave grid, each wave covering a 128×128 sub-tile via (4×4) 32×32 MFMA issues |
 | BLOCK_K | 64 | Matches `v_mfma_f32_32x32x16_fp8` four times per K-stage |
 | MFMA shape | 32×32×16 FP8 | 4 AGPRs/lane per MMA × 8 in-flight = 32 AGPRs |
 | Waves / WG | 4 (256 threads) | 2 producers + 2 consumers |

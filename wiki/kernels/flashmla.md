@@ -54,7 +54,7 @@ artifact_dir: artifacts/kernels/flashmla
 
 ## Overview
 
-FlashMLA provides high-performance kernels for DeepSeek's Multi-head Latent Attention (MLA) mechanism, which compresses the KV cache from 327-516 KB/token (standard MHA) down to 70 KB/token through a learned low-rank projection into a latent space. This extreme compression (4.66-7.28x reduction) is critical for serving DeepSeek-V3/V3.2 models at scale.
+FlashMLA provides high-performance kernels for DeepSeek's Multi-head Latent Attention (MLA) mechanism, which compresses the KV cache through a learned low-rank projection into a latent space. MLA's compressed KV is roughly an order of magnitude smaller than the equivalent multi-head KV cache (the per-token entry is 656 B; see "MLA KV Cache Layout" below). This compression is critical for serving DeepSeek-V3/V3.2 models at scale.
 
 FlashMLA includes four kernel variants: dense MLA decoding (SM90), sparse MLA decoding (SM90/SM100), dense MLA prefill (SM100), and sparse MLA prefill (SM90/SM100).
 

@@ -52,4 +52,4 @@ AITER auto-dispatches by architecture:
 
 ## Why It Matters
 
-AITER is the highest-leverage AMD source corpus for LLM inference kernel patterns. Its decode-attention and fused-MoE implementations are the AMD reference points compared against FlashInfer / vLLM / SGLang on Hopper/Blackwell. PRs in `ROCm/aiter` are a primary signal for what shapes and dtypes AMD optimizes first. See [kernel-aiter-fused-moe](../../wiki/kernels/aiter-fused-moe.md), [kernel-aiter-mla](../../wiki/kernels/aiter-mla.md).
+AITER is the highest-leverage AMD source corpus for LLM inference kernel patterns. Its decode-attention and fused-MoE implementations are the AMD reference points compared against FlashInfer / vLLM / SGLang on Hopper/Blackwell. PRs in `ROCm/aiter` are a primary signal for what shapes and dtypes AMD optimizes first. See [kernel-aiter-fused-moe](../../wiki/kernels/aiter-fused-moe.md), [kernel-aiter-mla-decode](../../wiki/kernels/aiter-mla-decode.md).

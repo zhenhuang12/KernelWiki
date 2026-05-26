@@ -14,7 +14,7 @@ blackwell_relevance: "128-byte swizzling mandatory for Blackwell tcgen05 inputs;
 
 ## Overview
 
-Shared memory swizzling remaps the linear address layout of a matrix tile in SMEM so that threads accessing consecutive columns (or rows) hit different 32-byte banks rather than the same bank. This eliminates bank conflicts that would otherwise serialize concurrent accesses. On Blackwell (SM100), 128-byte swizzling is mandatory for TMA loads and tcgen05.mma operands. Without it, performance drops to 46% of the achievable throughput for GEMM workloads.
+Shared memory swizzling remaps the linear address layout of a matrix tile in SMEM so that threads accessing consecutive columns (or rows) hit different 32-byte banks rather than the same bank. This eliminates bank conflicts that would otherwise serialize concurrent accesses. On Blackwell (SM100), 128-byte swizzling is mandatory for TMA loads and tcgen05.mma operands. Without it, performance drops to 17% of cuBLAS (vs 46% with 128B swizzle) for GEMM workloads.
 
 ## Why 128-Byte Swizzling is Mandatory on Blackwell
 
