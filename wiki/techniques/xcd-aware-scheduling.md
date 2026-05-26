@@ -105,4 +105,4 @@ In CPX-N partition modes, only N XCDs are visible. Read the partition mask at st
 - [hw-xcd](../hardware/xcd.md) — XCD topology
 - [hw-infinity-cache](../hardware/infinity-cache.md) — what XCD-awareness is preserving
 - [ROCm engineering blogs](https://rocm.blogs.amd.com/) — published case studies on chiplet-aware scheduling
-- [pr-aiter-297](../../sources/prs/aiter/PR-420.md) — production use in fused MoE
+- [pr-aiter-297](../../sources/prs/aiter/PR-297.md) — production use in fused MoE

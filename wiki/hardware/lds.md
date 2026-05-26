@@ -20,7 +20,7 @@ LDS is CDNA's per-compute-unit shared memory. Functionally equivalent to NVIDIA'
 |----------|---------------------|------------|------------|
 | Size per SM/CU | 228 KB (configurable) | 64 KB | 160 KB |
 | Banks | 32 × 4 B | 32 × 4 B | 32 × 4 B |
-| Peak bandwidth | 128 B/cycle | 128 B/cycle | 128 B/cycle (baseline); MI355X/ISSCC-2026 disclosure suggests ~256 B/cycle — **needs verification against primary AMD source** |
+| Peak bandwidth | 128 B/cycle | 128 B/cycle | 160 KB per CU at ~537 GB/s (ISSCC 2026 disclosure) |
 | Async global→shmem | cp.async.bulk (TMA) | buffer_load_lds (32 b/lane) | buffer_load_dwordx4_lds (128 b/lane) |
 | Access | ld.shared / st.shared | ds_read_* / ds_write_* | ds_read_* / ds_write_* |
 

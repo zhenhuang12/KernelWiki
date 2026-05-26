@@ -18,6 +18,7 @@ performance_claims:
     value: 4.2
     utilization: "~80% of MI300X HBM3 5.3 TB/s"
     source_id: pr-aiter-3128
+    evidence_basis: source-reported
   - gpu: MI300X
     dtype: fp8_e4m3
     shape: "batch=128, seqlen=8192, heads=128, head_dim=512+64"
@@ -25,6 +26,7 @@ performance_claims:
     value: 4.6
     utilization: "~87% of MI300X HBM3"
     source_id: pr-aiter-3128
+    evidence_basis: source-reported
 aliases: ["AITER MLA decode", "ROCm MLA decode", "AMD FlashMLA decode"]
 ---
 
@@ -41,8 +43,8 @@ The kernel reaches ~80-87% of MI300X HBM bandwidth on long-context decode, match
 For batch=128, seq=8192, head_dim=512:
 
 - KV cache traffic: `128 × 8192 × 512 × 2 (K+V latents) × 2 B = 2.0 GB / decode step`
-- MFMA compute: `128 × 128 × 8192 × 512 × 2 = 137 GFLOPS / decode step`
-- Arithmetic intensity ≈ 137 / 2048 = 67 FLOPs/byte → HBM bound on MI300X (peak FP8 2614.9 TFLOPS / 5.3 TB/s ≈ 493 FLOPs/byte)
+- MFMA compute: `128 × 128 × 8192 × 512 × 2 = 137 GFLOPs / decode step`
+- Arithmetic intensity ≈ 137 / 2048 = 67 FLOPs/byte → HBM bound on MI300X. Roofline ridge points: FP8 = 2614.9 / 5.3 ≈ 493 FLOPs/byte; BF16 = 1307.4 / 5.3 ≈ 246 FLOPs/byte. MLA decode at 67 FLOPs/byte sits well below both — memory-bound.
 
 So the win comes from *not wasting HBM bandwidth* — paged-KV access pattern, coalesced loads, and avoiding redundant K-cache reads across Q-tiles for the same sequence.
 

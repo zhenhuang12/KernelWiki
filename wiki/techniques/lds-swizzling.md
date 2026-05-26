@@ -87,7 +87,14 @@ uint32_t write_off_bytes =
       (row * DWORD_PER_ROW
        + (col_dword ^ (row & 0x7))) * 4;
 
-__builtin_amdgcn_buffer_load_lds(rsrc, write_off_bytes, ...);
+__builtin_amdgcn_raw_buffer_load_lds(
+    rsrc,
+    /*lds_ptr=*/ smem_a + write_off_bytes,
+    /*size=*/    4,                    // dword variant
+    /*voffset=*/ thread_gmem_off,
+    /*soffset=*/ 0,
+    /*offset=*/  0,
+    /*aux=*/     0);
 
 // Consumer (ds_read in the MFMA loop)
 auto a_frag = ds_read_b128(smem_a + write_off_bytes);

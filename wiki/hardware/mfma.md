@@ -80,7 +80,7 @@ for (int k = 0; k < K_per_block; k += 16) {
     auto a_frag = lds_load_a_tile(k);  // 4 VGPRs / lane
     auto b_frag = lds_load_b_tile(k);  // 4 VGPRs / lane
     // MFMA accumulate
-    acc = __builtin_amdgcn_mfma_f32_16x16x16bf16_1k(a_frag, b_frag, acc, 0, 0, 0);
+    acc = __builtin_amdgcn_mfma_f32_16x16x16_bf16(a_frag, b_frag, acc, 0, 0, 0);
 }
 // acc lives in AGPRs; epilogue copies to VGPR before store
 ```

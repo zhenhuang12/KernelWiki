@@ -14,7 +14,7 @@ aliases: [XCD, "Accelerator Complex Die", "AMD chiplet", "compute die"]
 
 ## Overview
 
-CDNA 3 / CDNA 4 GPUs are chiplet-based: each GPU contains 8 Accelerator Complex Dies (XCDs), and each XCD packages 38 active compute units, its own L2 cache (4 MB), and shared access to the central 256 MB Infinity Cache (MALL). This is structurally different from NVIDIA's monolithic SM topology.
+CDNA 3 / CDNA 4 GPUs are chiplet-based: each GPU contains 8 Accelerator Complex Dies (XCDs), each XCD packages its own L2 cache (4 MB) and shares access to the central 256 MB Infinity Cache (MALL). Per-XCD CU counts differ by generation: MI300X (CDNA 3) has 38 active CUs per XCD (40 physical, 2 disabled for yield) → 304 active CUs total; MI355X (CDNA 4) has 32 active CUs per XCD (36 physical) → 256 active CUs total. This is structurally different from NVIDIA's monolithic SM topology.
 
 ## Topology
 
@@ -27,11 +27,13 @@ CDNA 3 / CDNA 4 GPUs are chiplet-based: each GPU contains 8 Accelerator Complex 
    │   ↕     ↕     ↕     ↕   │
    │  XCD4  XCD5  XCD6  XCD7 │   ← 4 XCDs below
    └─────────────────────────┘
-   Each XCD on MI300X: ~38 physical CUs (~32 active per XCD typical
-   harvested config), 4 MB private L2, 8 HBM3 stacks shared.
+   MI300X (CDNA 3): 40 physical / 38 active CUs per XCD (304 total),
+   4 MB private L2, 8 HBM3 stacks shared.
+   MI355X (CDNA 4): 36 physical / 32 active CUs per XCD (256 total),
+   4 MB private L2, 8 HBM3E stacks shared. (MI355X launch material)
 ```
 
-CDNA 4 (MI355X) keeps the 8-XCD layout but with a different CU count per XCD and HBM3E stacks — consult the CDNA 4 whitepaper for the per-die CU census.
+CDNA 4 (MI355X) keeps the 8-XCD layout but with a smaller per-XCD CU count and HBM3E stacks.
 
 There is no equivalent on NVIDIA Hopper or Blackwell — the closest analogue is the GB200 "die-pair" but the unit of scheduling is still the SM, not a die.
 
@@ -62,7 +64,7 @@ Adjacent logical tiles now share an XCD and therefore an L2; cache hit-rates jum
 
 ## Compute Partitioning (CPX / DPX)
 
-CDNA 3/4 support compute-partition (CPX) and memory-partition (DPX) modes that logically subdivide the GPU into 1/2/4/8 partitions. Each partition gets a contiguous subset of XCDs and HBM stacks. CPX-8 is one XCD per partition — useful for tenant isolation and small-batch inference where a single workload cannot fill 304 CUs. Kernels written without partition awareness simply see fewer CUs (the runtime hides the partition split).
+CDNA 3/4 support compute-partition (CPX) and memory-partition (DPX) modes that logically subdivide the GPU into 1/2/4/8 partitions. Each partition gets a contiguous subset of XCDs and HBM stacks. CPX-8 is one XCD per partition — useful for tenant isolation and small-batch inference where a single workload cannot fill the full die (304 CUs on MI300X, 256 on MI355X). Kernels written without partition awareness simply see fewer CUs (the runtime hides the partition split).
 
 ## Cache Hierarchy
 
