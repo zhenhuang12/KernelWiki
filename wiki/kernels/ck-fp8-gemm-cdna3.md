@@ -89,8 +89,8 @@ The `BlockGemmPipelineV3` template hides the wave-id branching, `s_waitcnt`, `s_
 
 | Pipeline | Producer | Consumer | LDS stages | Peak FP8 % on MI300X |
 |----------|----------|----------|------------|------------------------|
-| V1 (legacy) | inline `buffer_load + ds_write` | MFMA after barrier | 1 | ~40% |
-| V2 | inline `buffer_load + ds_write` | MFMA with prefetch | 2 | ~60% |
+| V1 (legacy) | inline `buffer_load + ds_write` | MFMA after barrier | 1 | ~25-30% |
+| V2 | inline `buffer_load + ds_write` | MFMA with prefetch | 2 | ~35-40% |
 | V3 (this) | wave-specialized `buffer_load_dword_lds` | MFMA + sched_barrier | 2 | ~45-47% |
 
 V3 is the first CK pipeline to fully wave-specialize and use direct-to-LDS.
@@ -141,4 +141,4 @@ For smaller GEMMs (M < 256 or skinny K), the V3 pipeline under-utilizes — fall
 - [technique-wave-specialization](../techniques/wave-specialization.md)
 - [technique-mfma-pipelining](../techniques/mfma-pipelining.md)
 - [kernel-ck-mxfp4-gemm-cdna4](ck-mxfp4-gemm-cdna4.md) — CDNA 4 successor with block-scaled MFMA
-- [blog-rocm-cdna4-gemm-kernels](../../sources/blogs/rocm-cdna4-gemm-kernels.md) — 9-stage walk from 1.15 to 2680 TFLOPS on CDNA 4 (https://rocm.blogs.amd.com/software-tools-optimization/cdna4-gemm-kernels/README.html)
+- [blog-rocm-cdna4-gemm-kernels](../../sources/blogs/rocm-cdna4-gemm-kernels.md) — 9-stage walk from 1.15 → 2680 (4096³) / 3204 (8192³) TFLOPS on CDNA 4 (https://rocm.blogs.amd.com/software-tools-optimization/cdna4-gemm-kernels/README.html)

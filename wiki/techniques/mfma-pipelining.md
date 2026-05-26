@@ -80,10 +80,11 @@ for (int kk = 0; kk < BLOCK_K; kk += MFMA_K) {
     auto a = lds_read(smem_a[stage], kk);
     auto b = lds_read(smem_b[stage], kk);
 
-    // Prevent LLVM from hoisting the next K-stage's ds_read before this MFMA
-    __builtin_amdgcn_sched_barrier(0x0);
+    // Prevent LLVM from hoisting the next K-stage's ds_read before this MFMA;
+    // 0x308 = MFMA (0x008) | DS read (0x100) | DS write (0x200) — see L120 below.
+    __builtin_amdgcn_sched_barrier(0x308);
     acc = mfma_32x32x16(a, b, acc);
-    __builtin_amdgcn_sched_barrier(0x0);
+    __builtin_amdgcn_sched_barrier(0x308);
 }
 ```
 

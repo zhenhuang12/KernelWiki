@@ -41,6 +41,8 @@ lane 1  reads (row, 8..15)  -> dwords 4..7   -> banks  4  5  6  7
 lane 8  reads (row, 64..71) -> dwords 32..35 -> banks  0  1  2  3   <-- collides with lane 0
 ```
 
+(For this illustration, treat the row stride as ≥512 B so that column offsets 64..71 stay in-row; with a narrower `BLOCK_K=32` the lane-8 offset wraps into the next row's storage region, but the bank-mapping arithmetic — and therefore the conflict — is identical.)
+
 Eight lanes hit each bank → 8× serialization → MFMA loop stalls for ~8 cycles per `ds_read`.
 
 ## The Fix: XOR Swizzle by Row Index

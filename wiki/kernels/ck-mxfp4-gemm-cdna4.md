@@ -132,7 +132,7 @@ MXFP4 has a 4× operand-bandwidth advantage over FP8, so this kernel is compute-
 
 ## Caveats
 
-- The two scale streams add a third LDS region; budget LDS as `2 × (256·128/2 + 128·256/2 + 256·4 + 4·256) × 3 stages` ≈ 78 KB.
+- The two scale streams add a third LDS region; budget LDS as `(256·128/2 + 128·256/2 + 256·4 + 4·256) × 3 stages` ≈ 102 KB (per-stage region is `packedA + packedB + scalesA + scalesB`, not doubled).
 - UE8M0 scales saturate at very small magnitudes — verify that activation calibration doesn't produce scales below 2⁻¹²⁷.
 - Mixed cbsz/blgp formats (MXFP4 × MXFP6) work but the LLVM scheduler sometimes fails to interleave their `ds_read` issue widths optimally — `sched_barrier` annotation is mandatory.
 

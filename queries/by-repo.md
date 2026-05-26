@@ -51,7 +51,7 @@
 | [#3128](../sources/prs/aiter/PR-3128.md) | hsa/gfx942/mla: fix BF16 mla_qh8 LDS size + add FP8 mla_qh8 kernel | 2026-05-19 | mfma-pipelining | mla, attention, decode |
 | [#2911](../sources/prs/aiter/PR-2911.md) | F8 fmha ASM gfx950 | 2026-05-07 | mfma-pipelining | flash-attention, fp8, mfma |
 | [#2917](../sources/prs/aiter/PR-2917.md) | Add MLA decode kernel with sub_kv=64 and sub_qh=8 | 2026-05-01 | mfma-pipelining | mla, attention, decode |
-| [#297](../sources/prs/aiter/PR-297.md) | [RFC] enhance the fmoe heuristic rule for block_n selection | 2025-04-18 | tile-scheduling | moe, fused-moe, mfma |
+| [#297](../sources/prs/aiter/PR-297.md) | [RFC] enhance the fmoe heuristic rule for block_n selection | 2025-04-18 | tile-scheduling | moe, fused-moe |
 
 <a id="rocmcomposable_kernel"></a>
 ## ROCm/composable_kernel
@@ -80,7 +80,7 @@
 
 | PR | Title | Date | Techniques | Tags |
 |-----|-------|------|------------|------|
-| [#6156](../sources/prs/rocm-systems/PR-6156.md) | [RCCL] AllGather: align Direct path with AlltoAll | 2026-05-19 | communication-overlap | all-reduce, all-to-all, xgmi |
+| [#6156](../sources/prs/rocm-systems/PR-6156.md) | [RCCL] AllGather: align Direct path with AlltoAll | 2026-05-19 | communication-overlap | all-gather, all-to-all, xgmi |
 
 <a id="deepseek-aideepgemm"></a>
 ## deepseek-ai/DeepGEMM

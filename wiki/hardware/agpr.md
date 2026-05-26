@@ -16,15 +16,15 @@ aliases: [AGPR, "Accumulation VGPR", "acc VGPR", "accumulation register"]
 
 AGPRs (Accumulation VGPRs) are a second 32-bit register file class on CDNA, used exclusively as the destination of MFMA accumulators and the source/destination of `v_accvgpr_read_b32` / `v_accvgpr_write_b32`. The AGPR pool is *shared* with the regular VGPR pool.
 
-Sizing is **per lane** (each SIMD has 64 lanes; the figures below refer to one lane's view of the register file):
+Sizing is **per SIMD per lane** (each CU has 4 SIMDs and each SIMD has 64 lanes; the figures below refer to one lane's view of one SIMD's register file):
 
-- CDNA 3 provides 512 VGPR-equivalent 32-bit registers per lane.
-- Up to 256 of those per lane can be addressed as AGPRs (acc-VGPRs) — i.e. the AGPR-addressable subset the MFMA datapath can write to.
-- The compiler partitions the per-lane budget between "plain" VGPRs and AGPRs at compile time; AGPRs spent on MFMA accumulators directly reduce the per-lane VGPR headroom available for staging, loop-carried values, and software pipelining.
+- CDNA 3 provides 512 VGPR-equivalent 32-bit registers per SIMD per lane.
+- On gfx90a the AGPR-addressable cap is 256 per wave; on gfx942 (CDNA 3) and gfx950 (CDNA 4) the VGPR/AGPR split is flexible, totaling 512 entries per SIMD per lane, with up to 256 addressable as AGPRs at single-wave-per-SIMD occupancy.
+- The compiler partitions the per-SIMD-per-lane budget between "plain" VGPRs and AGPRs at compile time; AGPRs spent on MFMA accumulators directly reduce the per-SIMD-per-lane VGPR headroom available for staging, loop-carried values, and software pipelining.
 
 ## Why a Separate Register Class
 
-MFMA instructions write multi-cycle accumulator results back into AGPRs while the wave continues issuing independent VGPR-only instructions (loads, swizzles, scalar ops). The separation lets the compiler treat MFMA latency as independent of VGPR-side scheduling — but the shared per-lane budget (512 32-bit registers per lane on CDNA 3, of which up to 256 are AGPR-addressable) means heavy AGPR use directly reduces VGPR headroom.
+MFMA instructions write multi-cycle accumulator results back into AGPRs while the wave continues issuing independent VGPR-only instructions (loads, swizzles, scalar ops). The separation lets the compiler treat MFMA latency as independent of VGPR-side scheduling — but the shared per-SIMD-per-lane budget (512 32-bit registers per SIMD per lane on CDNA 3, of which up to 256 are AGPR-addressable) means heavy AGPR use directly reduces VGPR headroom.
 
 ## Allocation Examples
 
@@ -35,9 +35,9 @@ MFMA instructions write multi-cycle accumulator results back into AGPRs while th
 | `f32_32x32x16_fp8_fp8` | 16 FP32 | 16 |
 | `f32_16x16x32_fp8_fp8` | 4 FP32 | 4 |
 | `f64_16x16x4_f64` | 4 FP64 | 8 |
-| `scale_f32_32x32x64_f8f6f4` | 16 FP32 | 16 |
+| `v_mfma_scale_f32_32x32x64_f8f6f4` | 16 FP32 | 16 |
 
-A typical CDNA 3 GEMM with 2×2 wave-tile of 32×32×16 FP8 MFMAs needs 4 × 16 = 64 AGPRs per lane just for accumulators, leaving 448 VGPRs per lane for everything else (out of the 512-per-lane budget).
+A typical CDNA 3 GEMM with 2×2 wave-tile of 32×32×16 FP8 MFMAs needs 4 × 16 = 64 AGPRs per SIMD per lane just for accumulators, leaving 448 VGPRs per SIMD per lane for everything else (out of the 512-per-SIMD-per-lane budget). Note: the 448 figure assumes single-wave-per-SIMD occupancy; at 2 waves/SIMD the per-wave budget halves to 256 entries, so the same accumulator footprint leaves only ~192 VGPRs/wave for staging.
 
 ## VGPR / AGPR Budgeting
 

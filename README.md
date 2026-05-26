@@ -112,10 +112,10 @@ python3 scripts/generate-indices.py    # regenerate query indices
 
 ## Scope Rules
 
-- **Blackwell-first** — SM100 content is primary. SM90 requires explicit `blackwell_relevance` field.
+- **Dual-architecture** — NVIDIA SM100/SM90 and AMD CDNA 3/CDNA 4 are both first-class. Within the NVIDIA half, SM100 is primary and SM90-only pages require `blackwell_relevance`. AMD pages declare `architectures: [cdna3, cdna4]` (or one of the two) with per-arch differences spelled out inline.
 - **Kernel-only** — No distributed-system topics (DeepEP, DualPipe, EPLB are out of scope).
 - **English canonical** — All content in English.
-- **First-class DSLs** — CuTe DSL, CUDA C++, PTX, Triton. TileLang / cuTile / JAX-Pallas mentioned but no dedicated guides.
+- **First-class DSLs** — CuTe DSL, CUDA C++, PTX, Triton (NVIDIA); HIP, Composable Kernel (CK / CK-Tile), AMDGCN inline asm, FlyDSL (AMD). Others mentioned but no dedicated pages.
 
 ## Repository Layout
 

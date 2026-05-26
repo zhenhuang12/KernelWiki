@@ -31,7 +31,7 @@ HIP is the entry-point language for AMD kernel work — everything in CK, AITER,
 | `__ballot_sync(mask, p)` | `__ballot(p)` | 64-bit result on CDNA |
 | `cudaMalloc` | `hipMalloc` | runtime API |
 | `cuBLAS` | `hipBLAS` / `hipBLASLt` | hipBLASLt for LT-style API |
-| `cp.async.bulk` (TMA) | `__builtin_amdgcn_buffer_load_lds` | per-lane, not descriptor-driven |
+| `cp.async.bulk` (TMA) | `__builtin_amdgcn_raw_buffer_load_lds` | per-lane, not descriptor-driven |
 | `wgmma.mma_async` | `__builtin_amdgcn_mfma_*` | single wave, sync; cf. [hw-mfma](../hardware/mfma.md) |
 | inline PTX | inline AMDGCN asm | cf. [lang-amdgcn-asm](amdgcn-asm.md) |
 

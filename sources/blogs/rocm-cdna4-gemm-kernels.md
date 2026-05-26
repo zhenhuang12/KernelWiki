@@ -21,17 +21,19 @@ retrieved_at: 2026-05-26
 
 ## Summary
 
-Step-by-step ROCm engineering walk-through of building an FP8 GEMM kernel for AMD CDNA 4 (gfx950 / MI355X) in pure HIP/C++. The kernel evolves across nine stages, each lifting throughput on a 4096³ FP8 workload:
+Step-by-step ROCm engineering walk-through of building an FP8 GEMM kernel for AMD CDNA 4 (gfx950 / MI355X) in pure HIP/C++. The kernel evolves across nine stages on a 4096³ FP8 workload:
 
-1. Naive scalar loop — **1.15 TFLOPS**
-2. Add MFMA 16×16×128 — **30.05 TFLOPS**
-3. Add `llvm.amdgcn.raw.buffer.load.lds` (direct global → LDS) — **506.7 TFLOPS**
-4. Add LDS XOR swizzle (bank-conflict elimination) — improvement folded into next stage
-5. Double buffering — **1166 TFLOPS**
-6. Larger tile shape with proper register budget — further uplift
-7. Multi-stage software pipeline — incremental
-8. 8-wave block ping-pong with `s_setprio` + `sched_barrier` — **2680 TFLOPS** (4096³)
-9. Same template at 8192³ — **3204 TFLOPS** (beats hipBLASLt's 3130)
+1. Naive baseline — **1.15 TFLOPS**
+2. LDS tiling — **4.80 TFLOPS**
+3. Matrix-core (MFMA) baseline — **30.05 TFLOPS**
+4. MFMA + vectorized global loads — **336.88 TFLOPS**
+5. MFMA + direct global→LDS load (`llvm.amdgcn.raw.buffer.load.lds`) — **506.70 TFLOPS**
+6. LDS XOR swizzle stacked on direct-to-LDS — **497.43 TFLOPS** (slight regression; pays off later when paired with double buffering)
+7. Double buffering — **1166.41 TFLOPS**
+8. Multi-wave tuning (256×256 tile, 512 threads) — **2288.16 TFLOPS**
+9. 8-wave block ping-pong with `s_setprio` + `sched_barrier` — **2680.33 TFLOPS**
+
+At 4096³ the final kernel lands within ~2.5% of hipBLASLt (2680 vs 2750 TFLOPS). At 8192³ the same template reaches **3204.15 TFLOPS**, edging out hipBLASLt's **3130.21 TFLOPS**. All without dropping to assembly — the work stays at the HIP/C++ level throughout.
 
 Includes a CDNA 3 vs CDNA 4 contrast table covering MFMA shape availability, direct-to-LDS variants (32-bit vs 128-bit), and AGPR pool semantics.
 

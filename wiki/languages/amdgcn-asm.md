@@ -55,7 +55,10 @@ asm volatile(
 ### Scheduler barrier with explicit mask
 
 ```cpp
-// Block compiler reordering between asm blocks of distinct classes:
+// Block compiler reordering between asm blocks of distinct classes.
+// Mask bits below are illustrative — the canonical reference is LLVM
+// AMDGPUUsage's `__builtin_amdgcn_sched_barrier` mask table
+// (https://llvm.org/docs/AMDGPUUsage.html#llvm-amdgcn-sched-barrier).
 // 0x1 = ALU, 0x2 = VMEM (vector memory), 0x4 = SALU, 0x8 = SMEM, 0x20 = LDS
 __builtin_amdgcn_sched_barrier(0x0);   // hard barrier (no reorder)
 __builtin_amdgcn_sched_barrier(0x1);   // allow only ALU to cross
@@ -64,7 +67,7 @@ __builtin_amdgcn_sched_barrier(0x1);   // allow only ALU to cross
 ### Drain memory counters explicitly
 
 ```cpp
-asm volatile("s_waitcnt vmcnt(0) & lgkmcnt(0)" ::: "memory");
+asm volatile("s_waitcnt vmcnt(0) lgkmcnt(0)" ::: "memory");
 ```
 
 This is the AMD equivalent of `__threadfence_block()` for ordering an async load (vmcnt) and an LDS operation (lgkmcnt) before a `s_barrier`.

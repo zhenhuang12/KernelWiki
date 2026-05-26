@@ -27,7 +27,8 @@ Despite these constraints, wave-specialized kernels (CK-Tile V3 pipeline) routin
 
 | Wave | Role | Responsibility |
 |------|------|----------------|
-| 0, 1 | Producer | Issue `buffer_load_dwordx4_lds` for A/B tiles; arrive at `s_barrier` after `s_waitcnt vmcnt(0)` |
+| 0, 1 (CDNA 3) | Producer | Issue `buffer_load_dword_lds` for A/B tiles (32 b/lane, widest direct-to-LDS on gfx942); arrive at `s_barrier` after `s_waitcnt vmcnt(0)` |
+| 0, 1 (CDNA 4) | Producer | Issue `buffer_load_dwordx4_lds` for A/B tiles (128 b/lane, gfx950 only); arrive at `s_barrier` after `s_waitcnt vmcnt(0)` |
 | 2, 3 | Consumer | Wait at `s_barrier`; `ds_read_b128` from LDS into VGPR; issue `v_mfma_*` accumulating to AGPR |
 
 For attention kernels, the consumer waves also run the online softmax (rescale, max, exp) between MFMA blocks.
@@ -90,8 +91,8 @@ gemm_wave_specialized(const bf16* A, const bf16* B, float* C,
 
 - The double `__syncthreads()` per stage (handoff + release) replaces NVIDIA's per-stage mbarrier pair. Each barrier is a `s_barrier` workgroup-wide.
 - `s_waitcnt vmcnt(0)` after the producer's last load is critical — without it the consumer can read pre-fetch LDS contents.
-- Place `__builtin_amdgcn_sched_barrier(0x0)` around the MFMA inner loop if the LLVM scheduler is interleaving `ds_read` from a future K-stage into the current one (rare with the V3 pipeline but possible with custom HIP).
-- `s_setprio` is the CDNA wave-priority primitive that complements `sched_barrier`. It takes a 2-bit immediate (priorities 0-3); issuing `s_setprio 1` raises the calling wave's hardware scheduling priority so the issue arbiter favors it on contended cycles. The typical wave-specialized pattern runs producer waves at priority 1 while consumer/MFMA waves stay at the default priority 0, biasing the arbiter toward keeping the direct-to-LDS load pipeline full and ahead of MFMA consumption. Together with `sched_barrier` (instruction-group fencing) and `s_barrier` (wave synchronization), `s_setprio` is the third leg of software wave specialization on CDNA, which lacks any hardware warp-specialization machinery analogous to Hopper's specialized warps.
+- Place `__builtin_amdgcn_sched_barrier(0x308)` around the MFMA inner loop if the LLVM scheduler is interleaving `ds_read` from a future K-stage into the current one (rare with the V3 pipeline but possible with custom HIP). `0x308 = MFMA (0x008) | DS read (0x100) | DS write (0x200)` — matches the canonical inner-loop mask documented in `mfma-pipelining.md`, letting MFMAs and LDS traffic reorder while pinning VMEM and VALU/SALU in place.
+- `s_setprio` is the CDNA wave-priority primitive that complements `sched_barrier`. It is an imm16 SOPP encoding where only the low 2 bits encode the priority (0-3); issuing `s_setprio 1` raises the calling wave's hardware scheduling priority so the issue arbiter favors it on contended cycles. The typical wave-specialized pattern runs producer waves at priority 1 while consumer/MFMA waves stay at the default priority 0, biasing the arbiter toward keeping the direct-to-LDS load pipeline full and ahead of MFMA consumption. Together with `sched_barrier` (instruction-group fencing) and `s_barrier` (wave synchronization), `s_setprio` is the third leg of software wave specialization on CDNA, which lacks any hardware warp-specialization machinery analogous to Hopper's specialized warps.
 
 ## CDNA 3 vs CDNA 4
 

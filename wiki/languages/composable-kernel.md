@@ -15,7 +15,7 @@ aliases: [CK, "Composable Kernel", "CK-Tile", CKTile]
 
 ## Overview
 
-[ROCm/composable_kernel](https://github.com/ROCm/composable_kernel) is AMD's header-only C++ template library that composes high-performance GPU kernels from reusable tile programs. Two coexisting layers:
+[ROCm/composable_kernel](https://github.com/ROCm/composable_kernel) is AMD's header-only C++ template library that composes high-performance GPU kernels from reusable tile programs. (Note: the repo is now marked as moved to [ROCm/rocm-libraries](https://github.com/ROCm/rocm-libraries); the original `ROCm/composable_kernel` remains as a read-only mirror — analogous to the RCCL → `ROCm/rocm-systems` move.) Two coexisting layers:
 
 - **CK (classic)** — original tensor-program library used by rocBLAS, MIOpen, migraphx. Heavy template metaprogramming.
 - **CK-Tile** — newer per-wave tile-program DSL, simpler API, closer to CuTe's tile/copy/MMA abstractions. Where new CDNA 3/4 kernels live.

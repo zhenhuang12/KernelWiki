@@ -24,7 +24,7 @@ A 32-element block is stored as:
 [ data: 32 × {FP4/FP6/FP8 elements} ] [ scale: 1 × UE8M0 byte ]
 ```
 
-UE8M0 is an 8-bit unsigned, all-exponent format encoding `2^(s - 127)`, with `s=0` reserved for zero. Effective range is `2^-126 … 2^128`, which covers every reasonable per-block scale.
+UE8M0 is an 8-bit unsigned, all-exponent format encoding `2^(s - 127)`. Effective range is `2^-127 … 2^127` (encoded by `0x00..0xFE`); `0xFF` is reserved as NaN per the OCP MX spec. UE8M0 has no zero encoding (`0x00` decodes to `2^-127`, not zero). This range covers every reasonable per-block scale.
 
 | Format | Element bits | Per-block bytes | Effective bits-per-element |
 |--------|--------------|------------------|----------------------------|

@@ -33,10 +33,14 @@ This consumes 4 VGPRs per active load *per lane*, which directly competes with M
 With direct-to-LDS:
 
 ```
+; CDNA 4 (gfx950) only — 128-bit direct-to-LDS:
 buffer_load_dwordx4 v_lds_off, v_g_off, s_rsrc, 0 lds   ; HBM -> LDS, no VGPR
+
+; CDNA 3 (gfx942) fallback — widest direct-to-LDS is 32-bit:
+buffer_load_dword   v_lds_off, v_g_off, s_rsrc, 0 lds   ; HBM -> LDS, no VGPR
 ```
 
-The producer wave needs only its address-computation registers; the operand registers are free for the consumer's MFMA inner loop.
+The producer wave needs only its address-computation registers; the operand registers are free for the consumer's MFMA inner loop. Note that the `dwordx4` LDS variant is **CDNA 4 only** — CDNA 3 tops out at `buffer_load_dword` for direct-to-LDS and must issue 4× as many loads to move the same bytes.
 
 ## Width per Architecture
 

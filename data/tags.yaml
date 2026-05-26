@@ -104,6 +104,7 @@ kernel_types:
   - gated-dual-gemm
   - batched-gemv
   - all-reduce              # Collective: AllReduce
+  - all-gather              # Collective: AllGather
   - all-to-all              # Collective: AllToAll (used by EP dispatch/combine)
   - ep-dispatch-combine     # MoE expert-parallel routing primitive
   - fused-moe               # End-to-end fused MoE kernel (gate + permute + GEMMs + reduce)

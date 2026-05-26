@@ -68,7 +68,7 @@ CK-Tile and AITER use layer 2 (intrinsics) almost exclusively; rocBLAS uses laye
 A `v_mfma_f32_16x16x16_f16` writes 4 FP32 accumulators per lane → 4 AGPRs/lane.  
 A `v_mfma_f32_32x32x8_f16` writes 16 FP32 accumulators per lane → 16 AGPRs/lane.
 
-The VGPR + AGPR pool is **512 32-bit registers per SIMD shared**. Over-allocating AGPRs for a 32×32 tile reduces the VGPR headroom for software-pipelined operand loads, which is the single largest occupancy lever on AMD. The LLVM AMDGPU backend inserts `v_accvgpr_read_b32` / `v_accvgpr_write_b32` copies to bridge AGPR↔VGPR when needed.
+The VGPR + AGPR pool is **512 32-bit registers per SIMD per lane shared**. Over-allocating AGPRs for a 32×32 tile reduces the VGPR headroom for software-pipelined operand loads, which is the single largest occupancy lever on AMD. The LLVM AMDGPU backend inserts `v_accvgpr_read_b32` / `v_accvgpr_write_b32` copies to bridge AGPR↔VGPR when needed.
 
 ## Typical Wave Body
 

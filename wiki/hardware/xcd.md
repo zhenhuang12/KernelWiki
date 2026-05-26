@@ -19,7 +19,7 @@ CDNA 3 / CDNA 4 GPUs are chiplet-based: each GPU contains 8 Accelerator Complex 
 ## Topology
 
 ```
-         MI300X (CDNA 3)
+   MI300X (CDNA 3) — diagram represents MI300X specifically
    ┌─────────────────────────┐
    │  XCD0  XCD1  XCD2  XCD3 │   ← 4 XCDs above
    │   ↕     ↕     ↕     ↕   │
@@ -29,11 +29,9 @@ CDNA 3 / CDNA 4 GPUs are chiplet-based: each GPU contains 8 Accelerator Complex 
    └─────────────────────────┘
    MI300X (CDNA 3): 40 physical / 38 active CUs per XCD (304 total),
    4 MB private L2, 8 HBM3 stacks shared.
-   MI355X (CDNA 4): 36 physical / 32 active CUs per XCD (256 total),
-   4 MB private L2, 8 HBM3E stacks shared. (MI355X launch material)
 ```
 
-CDNA 4 (MI355X) keeps the 8-XCD layout but with a smaller per-XCD CU count and HBM3E stacks.
+CDNA 4 (MI355X) keeps the same 8-XCD layout (same diagram applies) but with a smaller per-XCD CU count and HBM3E stacks — see the MI355X CU counts called out in the Overview above (32 active / 36 physical CUs per XCD, 256 active CUs total).
 
 There is no equivalent on NVIDIA Hopper or Blackwell — the closest analogue is the GB200 "die-pair" but the unit of scheduling is still the SM, not a die.
 

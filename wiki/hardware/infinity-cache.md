@@ -14,7 +14,7 @@ aliases: ["Infinity Cache", MALL, "memory-attached last-level cache"]
 
 ## Overview
 
-Infinity Cache (MALL — Memory-Attached Last-Level cache) is a 256 MB on-package SRAM cache shared by all 8 XCDs on MI300X and MI355X. It sits between the per-XCD L2 caches (4 MB each) and HBM, and provides ~17 TB/s aggregate read bandwidth — roughly 2× HBM3 peak and 2.1× HBM3E peak. Functionally analogous to NVIDIA's L2 (per-GPU, ~50 MB on H100, ~80 MB on B200), but ~3–5× larger.
+Infinity Cache (MALL — Memory-Attached Last-Level cache) is a 256 MB on-package SRAM cache shared by all 8 XCDs on MI300X and MI355X. It sits between the per-XCD L2 caches (4 MB each) and HBM, and provides ~17 TB/s aggregate read bandwidth — roughly 3.2× HBM3 peak (17/5.3) and 2.1× HBM3E peak (17/8.0). Functionally analogous to NVIDIA's L2 (per-GPU, ~50 MB on H100, ~126 MB on B200 — per-die ~63 MB × 2 dies), but ~2–5× larger.
 
 ## Sizing Implications
 
@@ -35,7 +35,7 @@ The ROCm performance counter `TCC_HIT[0:3]` (per L2 slice) approximates L2 hit r
 
 | Aspect | NVIDIA H100 L2 | NVIDIA B200 L2 | AMD Infinity Cache (MI300X/MI355X) |
 |--------|----------------|----------------|--------------------------------------|
-| Size | 50 MB | ~80 MB | 256 MB |
+| Size | 50 MB | ~126 MB (per-die ~63 MB × 2) | 256 MB |
 | Bandwidth | ~10 TB/s | ~14 TB/s | ~17 TB/s |
 | Slices | 12 partitions | 24 partitions | Per-XCD slicing |
 | Cache policy hints | TMA / cp.async.bulk | TMA + L2 sectoring | `glc` / `slc` / `dlc` bits per load |

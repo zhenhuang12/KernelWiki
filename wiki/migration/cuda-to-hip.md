@@ -106,7 +106,10 @@ __global__ void __launch_bounds__(256) gemm_cdna3(
     int m_tile = (logical_bid / (N / 256)) * 256;
     int n_tile = (logical_bid % (N / 256)) * 256;
 
-    __shared__ __hip_bfloat16 smem_a[2][256 * 64];     // 2 stages
+    // 2 × (256·64 + 64·256) × sizeof(bf16) = 128 KB of LDS — fits CDNA 4
+    // (gfx950, 160 KB/CU) but exceeds CDNA 3's 64 KB budget. On gfx942 drop
+    // to 1 stage or shrink BLOCK_M/BLOCK_N to 128 to fit.
+    __shared__ __hip_bfloat16 smem_a[2][256 * 64];     // 2 stages, CDNA 4 only
     __shared__ __hip_bfloat16 smem_b[2][64 * 256];
 
     using f32x16 = __attribute__((__vector_size__(64))) float;

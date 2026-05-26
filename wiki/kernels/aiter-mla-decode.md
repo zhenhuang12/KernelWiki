@@ -42,9 +42,9 @@ The kernel reaches ~80-87% of MI300X HBM bandwidth on long-context decode, match
 
 For batch=128, seq=8192, head_dim=512:
 
-- KV cache traffic: `128 × 8192 × 512 × 2 (K+V latents) × 2 B = 2.0 GB / decode step`
-- MFMA compute: `128 × 128 × 8192 × 512 × 2 = 137 GFLOPs / decode step`
-- Arithmetic intensity ≈ 137 / 2048 = 67 FLOPs/byte → HBM bound on MI300X. Roofline ridge points: FP8 = 2614.9 / 5.3 ≈ 493 FLOPs/byte; BF16 = 1307.4 / 5.3 ≈ 246 FLOPs/byte. MLA decode at 67 FLOPs/byte sits well below both — memory-bound.
+- KV cache traffic: `128 × 8192 × 512 × 2 (K+V latents) × 2 B = 2.0 GB / decode step` (BF16-element accounting; the FP8 KV path above halves this to ~1 GB).
+- MFMA compute: `128 × 128 × 8192 × 512 × 2 = 137 GFLOPs / decode step` (this counts only the Q·K phase; the attn·V phase doubles the work, so total ≈ 274 GFLOPs and AI ≈ 137 FLOPs/byte against the same 2 GB traffic).
+- Arithmetic intensity ≈ 137 / 2048 = 67 FLOPs/byte (Q·K only) or ≈ 137 FLOPs/byte (Q·K + attn·V) → HBM bound on MI300X either way. Roofline ridge points (BF16-specific analysis): FP8 = 2614.9 / 5.3 ≈ 493 FLOPs/byte; BF16 = 1307.4 / 5.3 ≈ 246 FLOPs/byte. MLA decode at 67-137 FLOPs/byte sits well below both — memory-bound.
 
 So the win comes from *not wasting HBM bandwidth* — paged-KV access pattern, coalesced loads, and avoiding redundant K-cache reads across Q-tiles for the same sequence.
 

@@ -32,9 +32,16 @@ Encoding fields:
 | `abid` | 4 | Scale broadcast control within 32-elem block |
 | `scaleA`, `scaleB` | UE8M0 dwords | Per-block scales, interleaved by the assembler |
 
+> **Verify against AMD CDNA4 ISA reference.** The specific sub-format codes
+> listed above (E4M3=0, E5M2=1, E2M3=2, E3M2=3, E2M1=4) should be cross-checked
+> against the official gfx950 ISA document before relying on them in production
+> codegen.
+
 ## Block-Scaling Semantics
 
 A 32-element block of operand values is multiplied by `2^(scale - 127)` (UE8M0 bias) before accumulation. This is identical to the OCP MX specification and matches NVFP4's scaling on Blackwell. The kernel-author responsibility is to keep the scale stream cache-coherent with the operand stream — typically the same `buffer_load_dwordx4_lds` issues fetch both.
+
+Note: UE8M0 reserves `0xFF` as NaN per the OCP MX specification. UE8M0 has no zero encoding — `0x00` decodes to `2^-127`, not zero.
 
 ## Idiomatic Use
 
