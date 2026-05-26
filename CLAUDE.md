@@ -1,6 +1,6 @@
-# Blackwell Kernel Optimization Knowledge Base — Schema
+# GPU Kernel Optimization Knowledge Base — Schema
 
-A structured knowledge base of GPU kernel optimization for NVIDIA Blackwell (SM100) and Hopper (SM90), optimized for LLM agent retrieval.
+A structured knowledge base of GPU kernel optimization for NVIDIA Blackwell (SM100) / Hopper (SM90) and AMD Instinct MI300X (CDNA 3, gfx942) / MI355X (CDNA 4, gfx950), optimized for LLM agent retrieval.
 
 ## Navigation
 
@@ -111,7 +111,10 @@ performance_claims:
 
 ## Scope Rules
 
-- **Blackwell-first**: SM100 content is primary. SM90 only with explicit `blackwell_relevance`.
-- **Kernel-only**: No distributed system topics (DeepEP, DualPipe, EPLB excluded).
+- **Dual-architecture**: NVIDIA SM100/SM90 and AMD CDNA 3/CDNA 4 are both first-class. Within the NVIDIA half, SM100 is primary and SM90-only pages require `blackwell_relevance`. AMD pages declare `architectures: [cdna3, cdna4]` (or one of the two) with per-arch differences spelled out inline.
+- **Kernel-only**: No distributed system topics (DeepEP, DualPipe, EPLB, ROCSHMEM transport excluded).
 - **English canonical**: All content in English.
-- **First-class DSLs**: CuTe DSL, CUDA C++, PTX, Triton. Others mentioned but no dedicated pages.
+- **First-class DSLs**: CuTe DSL, CUDA C++, PTX, Triton (NVIDIA); HIP, Composable Kernel (CK / CK-Tile), AMDGCN inline asm, FlyDSL (AMD). Others mentioned but no dedicated pages.
+- **Source repositories**:
+  - NVIDIA stack: cutlass, sglang, vllm, flashinfer, pytorch, DeepGEMM
+  - AMD stack: ROCm/composable_kernel, ROCm/aiter, ROCm/mori (MoE Expert-Parallel dispatch/combine library + shmem/RDMA primitives — GitHub tagline "Modular RDMA Interface" undersells the EP role), ROCm/FlyDSL, ROCm/rccl (note: active RCCL development at ROCm/rocm-systems/projects/rccl; ROCm/rccl receives backport cherry-picks for stable branches)

@@ -8,6 +8,9 @@ architectures:
   - sm90
   - sm90a
   - sm120
+  # AMD Instinct architectures
+  - cdna3   # MI300X / MI300A / gfx942 / gfx940 / gfx941
+  - cdna4   # MI350X / MI355X / gfx950
 
 hardware_features:
   - tcgen05
@@ -27,6 +30,25 @@ hardware_features:
   - mbarrier
   - ldmatrix
   - stmatrix
+  # AMD CDNA hardware features
+  - mfma                 # Matrix Fused Multiply-Add (CDNA tensor cores)
+  - mfma-scale-f8f6f4    # CDNA4 block-scaled MXFP MFMA family
+  - lds                  # Local Data Share (AMD shared memory)
+  - agpr                 # Accumulation VGPR pool used by MFMA
+  - buffer-load-lds      # Direct global-to-LDS async load (CDNA3 32b / CDNA4 128b)
+  - global-load-lds      # CDNA3 32-bit direct global-to-LDS load variant
+  - mxfp4                # OCP MX FP4 (E2M1) with UE8M0 32-elem block scale
+  - mxfp6                # OCP MX FP6 (E2M3 / E3M2)
+  - mxfp8                # OCP MX FP8 (E4M3 / E5M2)
+  - xcd                  # Accelerator Complex Die (CDNA chiplet)
+  - infinity-cache       # MALL / memory-attached last-level cache
+  - infinity-fabric      # Inter-die / inter-GPU coherent fabric (xGMI)
+  - wavefront-64         # 64-lane wavefront (CDNA)
+  - s-barrier            # Workgroup-level scalar barrier
+  - s-waitcnt            # Memory counter wait (vmcnt / lgkmcnt)
+  - xgmi                 # Inter-GPU xGMI link
+  - ds-read              # LDS read instruction family (ds_read_b32/b64/b128)
+  - ds-write             # LDS write instruction family
 
 techniques:
   - warp-specialization
@@ -54,6 +76,15 @@ techniques:
   - fine-grained-quantization
   - cuda-core-promotion
   - jit-compilation
+  # AMD-applicable techniques
+  - wave-specialization     # Producer/consumer pattern on CDNA wavefronts
+  - xcd-aware-scheduling    # NUMA-aware tile mapping across XCDs
+  - lds-swizzling           # XOR / Morton swizzles for LDS bank conflicts
+  - wave-priority           # s_setprio scheduler bias
+  - sched-barrier           # __builtin_amdgcn_sched_barrier instruction ordering
+  - direct-to-lds           # buffer_load_lds / global_load_lds prefetch pattern
+  - mfma-pipelining         # K-stage software pipeline around MFMA
+  - cpx-mode-partitioning   # CPX / DPX MCP partitioning placement
 
 kernel_types:
   - gemm
@@ -72,6 +103,11 @@ kernel_types:
   - linear-attention
   - gated-dual-gemm
   - batched-gemv
+  - all-reduce              # Collective: AllReduce
+  - all-to-all              # Collective: AllToAll (used by EP dispatch/combine)
+  - ep-dispatch-combine     # MoE expert-parallel routing primitive
+  - fused-moe               # End-to-end fused MoE kernel (gate + permute + GEMMs + reduce)
+  - paged-attention         # Paged-KV attention (vLLM-style block tables)
 
 languages:
   - cuda-cpp
@@ -82,6 +118,11 @@ languages:
   - ptx
   - python
   - jax-pallas
+  # AMD-side languages / DSLs
+  - hip                     # HIP C++ kernel language
+  - composable-kernel       # CK / CK-Tile C++ template DSL
+  - flydsl                  # AMD Flexible Layout DSL (MLIR-backed)
+  - amdgcn-asm              # Raw AMDGCN assembly
 
 confidence:
   - verified

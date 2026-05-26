@@ -1,8 +1,8 @@
-# KernelWiki — Blackwell & Hopper Kernel Optimization Knowledge Base
+# KernelWiki — Blackwell / Hopper / CDNA 3 / CDNA 4 Kernel Optimization Knowledge Base
 
 > **Knowledge cutoff: 2026-04-27.** All upstream PRs, blog snapshots, and version-claim entries are anchored to upstream state on or before this date (recorded in [`data/refresh-cutoff.yaml`](data/refresh-cutoff.yaml)). Triton claims pin to release **3.6.0** (released 2026-01-21); CUTLASS claims pin to **4.5.0** (released 2026-03-27); see [`data/tool-versions.yaml`](data/tool-versions.yaml) for all tracked tools. To advance the cutoff, run `scripts/refresh_candidate_ledger.py`, regenerate PR pages, and bump the cutoff date file.
 
-A structured knowledge base of NVIDIA Blackwell (SM100, B200) and Hopper (SM90, H100) GPU kernel optimization, packaged as a Claude Code skill. The repository root **is** the skill directory — clone it directly into `~/.claude/skills/` and it works out of the box.
+A structured knowledge base of GPU kernel optimization for **NVIDIA Blackwell (SM100, B200) / Hopper (SM90, H100)** and **AMD Instinct MI300X (CDNA 3, gfx942) / MI355X (CDNA 4, gfx950)**, packaged as a Claude Code skill. The repository root **is** the skill directory — clone it directly into `~/.claude/skills/` and it works out of the box.
 
 ## Install as a Claude Code Skill
 
@@ -29,9 +29,10 @@ export BLACKWELL_WIKI_ROOT=/path/to/KernelWiki
 
 ## What's Here
 
-- **2,179 PR references** from NVIDIA/cutlass (32), sgl-project/sglang (645), vllm-project/vllm (833), flashinfer-ai/flashinfer (583), pytorch/pytorch (85), deepseek-ai/DeepGEMM (1) — Jan 2025 – Apr 2026
-- **48 synthesized wiki pages** — hardware features, techniques, kernel case studies, problem patterns, DSL guides, migration guides
-- **20 community blog summaries**, **11 official doc summaries**, **7 competition pages** (GPU Mode NVFP4 hackathon, FlashInfer MLSys 2026)
+- **2,179+ PR references** from NVIDIA/cutlass, sgl-project/sglang, vllm-project/vllm, flashinfer-ai/flashinfer, pytorch/pytorch, deepseek-ai/DeepGEMM, ROCm/composable_kernel, ROCm/aiter, ROCm/mori (MoE Expert-Parallel dispatch/combine library + shmem/RDMA primitives — GitHub tagline "Modular RDMA Interface" undersells the EP role), ROCm/FlyDSL, ROCm/rccl (note: active RCCL development at [ROCm/rocm-systems/projects/rccl](https://github.com/ROCm/rocm-systems/tree/main/projects/rccl); ROCm/rccl receives backport cherry-picks for stable branches) — Jan 2025 – Apr 2026
+- **Dual-architecture wiki coverage** — NVIDIA SM90/SM100 (tcgen05, TMEM, CLC, TMA, NVFP4, warp-spec) and AMD CDNA 3/4 (MFMA, AGPR, LDS, `buffer_load_*_lds`, XCD, Infinity Cache, MXFP4/6/8, wave-spec) on the same schema
+- **Synthesized wiki pages** — hardware features, techniques, kernel case studies, problem patterns, DSL guides (CuTe DSL / CUDA C++ / PTX / Triton / HIP / CK-Tile / AMDGCN / FlyDSL), migration guides (wgmma→tcgen05, register→TMEM, CUDA→HIP)
+- **Community blog summaries** (ROCm Blogs, GPUOpen, NVIDIA Developer), **official doc summaries** (CDNA 3/4 whitepapers & ISAs, ROCm/HIP docs), **competition pages**
 - **89 verbatim/extracted/derived asset bundles** under `artifacts/` (PR diffs, kernel files, blog code) — pinned to upstream SHAs via `PROVENANCE.yaml`
 - **6 auto-generated cross-reference indices** — by problem / technique / hardware feature / repo / kernel type / language
 - **6 candidate ledgers** tracking 4,222 merged PRs with include/defer/exclude decisions

@@ -1,33 +1,34 @@
 ---
 name: KernelWiki
-description: Use when the user asks about optimizing NVIDIA Blackwell (SM100, B200) or Hopper (SM90, H100) GPU kernels — tcgen05/TMEM/CLC/NVFP4/2-SM cooperative, warp specialization, FlashAttention-4, DeepGEMM, FlashMLA, MoE, grouped GEMM, CuTe-DSL/PTX/Triton on Blackwell, or wants concrete PR references from CUTLASS/SGLang/vLLM/FlashInfer/PyTorch. Do NOT use for generic CUDA Q&A that is not Blackwell/Hopper-specific, host-side framework integration, or distributed systems (DeepEP/EPLB/DualPipe).
+description: Use when the user asks about optimizing NVIDIA Blackwell (SM100, B200) / Hopper (SM90, H100) or AMD Instinct MI300X (CDNA 3, gfx942) / MI355X (CDNA 4, gfx950) GPU kernels — tcgen05/TMEM/CLC/NVFP4/2-SM cooperative, warp specialization, MFMA/AGPR/LDS/buffer_load_lds/XCD/MXFP4, FlashAttention-4, DeepGEMM, FlashMLA, fused MoE, grouped GEMM, CK-Tile / CuTe-DSL / PTX / Triton / HIP, or wants concrete PR references from CUTLASS / SGLang / vLLM / FlashInfer / PyTorch / composable_kernel / aiter / mori / rccl (note: RCCL active development at ROCm/rocm-systems/projects/rccl; ROCm/rccl receives backport cherry-picks for stable branches). Do NOT use for generic CUDA/HIP Q&A unrelated to tensor-core/matrix-core programming, host-side framework integration, or distributed systems (DeepEP / EPLB / DualPipe / ROCSHMEM transport).
 argument-hint: "[natural-language-question] | [--tag foo --type kernel] | [page-id]"
 allowed-tools: "Bash Read Grep Glob"
 ---
 
-# KernelWiki — Blackwell & Hopper Kernel Optimization Wiki
+# KernelWiki — Blackwell / Hopper / CDNA 3 / CDNA 4 Kernel Optimization Wiki
 
 > **Knowledge cutoff: 2026-04-27.** All upstream PR data, blog summaries, and version-claim entries reflect upstream state on or before this date (per `data/refresh-cutoff.yaml`). Re-run the refresh tooling to advance the cutoff.
 
-Query a structured, cross-referenced knowledge base of GPU kernel optimization for NVIDIA Blackwell (SM100) and Hopper (SM90) — 2179 merged PRs, 48 wiki synthesis pages, 7 competitions, 20 blogs, 11 doc summaries.
+Query a structured, cross-referenced knowledge base of GPU kernel optimization for NVIDIA Blackwell (SM100) / Hopper (SM90) and AMD Instinct MI300X (CDNA 3, gfx942) / MI355X (CDNA 4, gfx950).
 
 ## When To Use This Skill
 
 Trigger this skill when the user asks about:
 
-- **Blackwell/SM100 kernel programming** — tcgen05.mma, TMEM, CLC, 2-SM cooperative, NVFP4, FP8/FP4 block scaling, PDL/GDC
-- **Kernel implementations** — FlashAttention-4, DeepGEMM, FlashMLA, NSA, GatedDeltaNet, NVFP4 GEMM/GEMV, fused MoE, gated dual GEMM
-- **Performance patterns** — low SM utilization, memory-bound, register pressure, compute-bound, tail effects, pipeline stalls
-- **DSLs for Blackwell** — CuTe DSL, CUDA C++ with PTX inline, Triton on Blackwell
-- **Hopper → Blackwell migration** — wgmma → tcgen05, register → TMEM accumulators
-- **PR references** — "how did vLLM/SGLang/FlashInfer/CUTLASS/PyTorch implement X for SM100?"
+- **NVIDIA Blackwell/SM100 kernel programming** — tcgen05.mma, TMEM, CLC, 2-SM cooperative, NVFP4, FP8/FP4 block scaling, PDL/GDC
+- **AMD CDNA 3/4 kernel programming** — MFMA / `v_mfma_scale_f32_*_f8f6f4`, AGPR pressure, LDS XOR swizzle, `buffer_load_*_lds`, XCD-aware scheduling, Infinity Cache, MXFP4/6/8 (OCP MX), wave specialization, MFMA pipelining
+- **Kernel implementations** — FlashAttention-4, DeepGEMM, FlashMLA, NSA, GatedDeltaNet, NVFP4 GEMM/GEMV, fused MoE, gated dual GEMM, CK-Tile FP8/MXFP4 GEMM, AITER fused MoE / MLA decode
+- **Performance patterns** — low SM utilization, memory-bound, register pressure, compute-bound, tail effects, pipeline stalls, LDS bank conflicts, low MFMA utilization
+- **DSLs / languages** — CuTe DSL, CUDA C++ with PTX inline, Triton on Blackwell, HIP, Composable Kernel (CK / CK-Tile), AMDGCN inline assembly, FlyDSL
+- **Cross-architecture migration** — Hopper wgmma → Blackwell tcgen05, register → TMEM accumulators, CUDA → HIP / CDNA
+- **PR references** — "how did vLLM / SGLang / FlashInfer / CUTLASS / PyTorch / composable_kernel / aiter / mori / rccl implement X?" (RCCL active development at ROCm/rocm-systems/projects/rccl; ROCm/rccl receives backport cherry-picks for stable branches.)
 - **Competition solutions** — GPU Mode NVFP4 hackathon, FlashInfer MLSys 2026 submissions
 
 Do NOT use this skill for:
 
-- Generic CUDA questions unrelated to Blackwell/Hopper tensor cores
+- Generic CUDA / HIP questions unrelated to tensor-core / matrix-core kernel programming
 - Host-side framework integration (model loading, request routing, scheduling policy)
-- Distributed systems topics — DeepEP, EPLB, DualPipe are out of scope
+- Distributed systems topics — DeepEP, EPLB, DualPipe, ROCSHMEM transport are out of scope
 
 ## How To Query
 
@@ -102,7 +103,8 @@ When answering from this KB:
 - **Controlled vocabulary** (80+ tags) in `data/tags.yaml`, alias map in `data/aliases.yaml`
 - **Hybrid version-claim registry** — per-page `version_sensitive: <id>` pointers + `data/version-claims.yaml` central registry, validated for bidirectional consistency
 - **Validator** `scripts/validate.py` — 2265 files / 89 bundles / 6 ledgers / 0 errors
-- **Blackwell-first** — SM90 pages only appear when they carry explicit `blackwell_relevance`
+- **Blackwell-first for the NVIDIA half** — SM90-only pages only appear when they carry explicit `blackwell_relevance`
+- **CDNA 3 / CDNA 4 dual-architecture** — every AMD page declares both `cdna3` and `cdna4` when applicable, with explicit per-arch differences (LDS budget, MFMA shapes, scale-MFMA availability)
 
 The knowledge cutoff date is the last day on which upstream PRs / blog snapshots were refreshed. To advance it: run `scripts/refresh_candidate_ledger.py`, regenerate PR pages, then bump `data/refresh-cutoff.yaml::cutoff_date`.
 

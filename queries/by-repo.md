@@ -41,6 +41,47 @@
 | [#2037](../sources/prs/cutlass/PR-2037.md) | Groupwise scaling along M for FP8 gemm | 2025-01-13 | warp-specialization | fp8, gemm, tma |
 | [#2033](../sources/prs/cutlass/PR-2033.md) | [EVT] Add support for Row/Col broadcast PtrArray | 2025-01-08 | epilogue-fusion, kernel-fusion | epilogue-fusion, kernel-fusion, tma |
 
+<a id="rocmaiter"></a>
+## ROCm/aiter
+5 PRs
+
+| PR | Title | Date | Techniques | Tags |
+|-----|-------|------|------------|------|
+| [#3117](../sources/prs/aiter/PR-3117.md) | perf(flydsl): MXFP4 fused-MoE stage2 optimization for EP prefill | 2026-05-25 | mfma-pipelining, persistent-kernel, xcd-aware-scheduling | moe, fused-moe, mxfp4 |
+| [#3128](../sources/prs/aiter/PR-3128.md) | hsa/gfx942/mla: fix BF16 mla_qh8 LDS size + add FP8 mla_qh8 kernel | 2026-05-19 | mfma-pipelining | mla, attention, decode |
+| [#2911](../sources/prs/aiter/PR-2911.md) | F8 fmha ASM gfx950 | 2026-05-07 | mfma-pipelining | flash-attention, fp8, mfma |
+| [#2917](../sources/prs/aiter/PR-2917.md) | Add MLA decode kernel with sub_kv=64 and sub_qh=8 | 2026-05-01 | mfma-pipelining | mla, attention, decode |
+| [#297](../sources/prs/aiter/PR-297.md) | [RFC] enhance the fmoe heuristic rule for block_n selection | 2025-04-18 | tile-scheduling | moe, fused-moe, mfma |
+
+<a id="rocmcomposable_kernel"></a>
+## ROCm/composable_kernel
+6 PRs
+
+| PR | Title | Date | Techniques | Tags |
+|-----|-------|------|------------|------|
+| [#3098](../sources/prs/composable_kernel/PR-3098.md) | CK MoE MXFP4 blockm32 | 2025-11-07 | mfma-pipelining, fine-grained-quantization | moe, mxfp4, block-scale |
+| [#2731](../sources/prs/composable_kernel/PR-2731.md) | [CK_TILE] Add FAv3 fwd pipeline | 2025-09-01 | wave-specialization, mfma-pipelining | flash-attention, attention, composable-kernel |
+| [#2488](../sources/prs/composable_kernel/PR-2488.md) | MX GEMM - Add FP6 GEMM Test | 2025-07-11 | mfma-pipelining, fine-grained-quantization | gemm, mxfp6, block-scale |
+| [#2110](../sources/prs/composable_kernel/PR-2110.md) | [CK_TILE] support gfx950 matrix core in 01_fmha fwd | 2025-04-23 | mfma-pipelining | flash-attention, attention, composable-kernel |
+| [#1853](../sources/prs/composable_kernel/PR-1853.md) | CK Tile GEMM Compute V2 (2 LDS Ping Pong mechanism) | 2025-02-12 | mfma-pipelining, double-buffering, wave-specialization | gemm, composable-kernel, mfma |
+| [#1384](../sources/prs/composable_kernel/PR-1384.md) | [GEMM] F8 GEMM, performance optimized | 2024-07-19 | mfma-pipelining | gemm, fp8, composable-kernel |
+
+<a id="rocmrccl"></a>
+## ROCm/rccl
+1 PRs
+
+| PR | Title | Date | Techniques | Tags |
+|-----|-------|------|------------|------|
+| [#2099](../sources/prs/rccl/PR-2099.md) | GDA support for alltoall via rocSHMEM integration | 2026-01-09 | communication-overlap | all-to-all, ep-dispatch-combine, xgmi |
+
+<a id="rocmrocm-systems"></a>
+## ROCm/rocm-systems
+1 PRs
+
+| PR | Title | Date | Techniques | Tags |
+|-----|-------|------|------------|------|
+| [#6156](../sources/prs/rocm-systems/PR-6156.md) | [RCCL] AllGather: align Direct path with AlltoAll | 2026-05-19 | communication-overlap | all-reduce, all-to-all, xgmi |
+
 <a id="deepseek-aideepgemm"></a>
 ## deepseek-ai/DeepGEMM
 1 PRs
