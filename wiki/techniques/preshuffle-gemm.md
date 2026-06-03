@@ -8,7 +8,7 @@ confidence: source-reported
 reproducibility: snippet
 prerequisites: [hw-mfma, hw-lds, lang-flydsl]
 related: [lang-flydsl, technique-lds-swizzling, technique-direct-to-lds, technique-mfma-pipelining, technique-epilogue-fusion, technique-ping-pong-scheduling, kernel-grouped-gemm, kernel-fp8-block-scale-gemm]
-sources: [blog-amd-flydsl-gemm, blog-amd-flydsl, pr-aiter-3117, doc-amd-aiter-readme, doc-amd-cdna4-isa]
+sources: [blog-amd-flydsl-gemm, blog-amd-flydsl, blog-amd-flydsl-kimi-moe, pr-aiter-3117, doc-amd-aiter-readme, doc-amd-cdna4-isa]
 aliases: ["B-preshuffle", "preshuffle layout", "shuffled-B GEMM", "weight preshuffle"]
 symptoms: ["ds_read stalls in MFMA loop", "B-tile global load not coalesced", "MFMA throughput below peak on narrow-M GEMM", "epilogue store bank conflicts"]
 ---
@@ -179,7 +179,17 @@ M=16)** favors `tile_m=16, tile_n=128, tile_k=256`; **large-M (prefill)** favors
 `tile_m` (64–128) with `tile_n=256`. (Absolute TFLOPS are not published in the repo — the
 harness reports `TB/s` and `TFLOPS` per-shape and must be run on-device.)
 
-## Extending To MoE: AITER PR-3117 (FlyDSL MoE example — merged then reverted)
+## Extending To MoE
+
+FlyDSL's preshuffle base extends to fused-MoE, where AMD has published its strongest FlyDSL
+result: the [Kimi-K2.5 mixed-precision fused MoE](../../sources/blogs/amd-flydsl-kimi-moe.md)
+(W4A16 + BF16, `FLYDSL_W4A16_HYBRID=w2_bf16` running Stage-1 gate/up in W4A16 and Stage-2 down in
+BF16), which replaces SGLang's Triton `fused_moe`. On the dominant Kimi shape (tokens=16384,
+dim=7168, inter=512, E=384, topk=8) FlyDSL beats Triton **12.09→8.68 ms (bf16)** and
+**31.43→9.77 ms (w4a16)** — CK lacks W4A16 and GPU-faults on E=384 — for end-to-end **−65% TTFT /
+−69% TPOT / +162% throughput** on MI300X (no accuracy loss).
+
+### AITER PR-3117 (a reverted MoE example worth studying)
 
 [pr-aiter-3117](../../sources/prs/aiter/PR-3117.md) — *"perf(flydsl): MXFP4 fused-MoE
 stage2 optimization for EP prefill"* — was a FlyDSL production variant merged into AITER on
@@ -242,4 +252,5 @@ xcd-aware tile expansion, scheduler barriers, and wave priority — see
 - [technique-lds-swizzling](lds-swizzling.md) — the XOR16 bank-conflict model
 - [technique-direct-to-lds](direct-to-lds.md) — async A global→LDS staging
 - [kernel-grouped-gemm](../kernels/grouped-gemm.md) — MoE grouped-GEMM case study
-- [pr-aiter-3117](../../sources/prs/aiter/PR-3117.md) — FlyDSL MXFP4 MoE in AITER
+- [blog-amd-flydsl-kimi-moe](../../sources/blogs/amd-flydsl-kimi-moe.md) — Kimi-K2.5 fused-MoE win (benchmarked)
+- [pr-aiter-3117](../../sources/prs/aiter/PR-3117.md) — FlyDSL MXFP4 MoE in AITER (reverted)

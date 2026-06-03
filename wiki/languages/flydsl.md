@@ -4,7 +4,7 @@ title: "FlyDSL — AMD Flexible LaYout DSL"
 type: language
 tags: [flydsl, composable-kernel, mfma, lds, hip, preshuffle, jit-compilation]
 related: [lang-hip, lang-composable-kernel, hw-mfma, hw-lds, technique-preshuffle-gemm, technique-lds-swizzling, technique-wave-specialization]
-sources: [blog-amd-flydsl, blog-amd-flydsl-gemm, pr-aiter-3117, doc-amd-cdna3-isa, doc-amd-cdna4-isa]
+sources: [blog-amd-flydsl, blog-amd-flydsl-gemm, blog-amd-flydsl-kimi-moe, blog-amd-flydsl-nightly-wheels, pr-aiter-3117, doc-amd-cdna3-isa, doc-amd-cdna4-isa]
 reproducibility: snippet
 architectures: [cdna3, cdna4]
 confidence: source-reported
@@ -100,10 +100,29 @@ This is the same layout convention as CK / AITER (the B-layout builder docstring
 "matches aiter/CK preshuffle"). Full treatment in
 [technique-preshuffle-gemm](../techniques/preshuffle-gemm.md).
 
-FlyDSL has reached AITER's tree at least once: [pr-aiter-3117](../../sources/prs/aiter/PR-3117.md)
-merged a FlyDSL MXFP4 fused-MoE stage-2 kernel for DeepSeek-R1/V3 EP4 prefill (async-X prologue,
-persistent expansion, wave-priority + scheduler-barrier tuning) — though it was **reverted the
-next day** (PR #3344), so nothing FlyDSL currently ships in AITER; treat it as a technique demo.
+FlyDSL→AITER integration is active and evolving (dozens of FlyDSL GEMM/MoE/MHA/quantize PRs in
+ROCm/aiter across gfx942/gfx950/gfx1250). Some land (e.g. aiter #3476, a FlyDSL MoE bugfix,
+merged); others are in-flight or closed-unmerged; the much-cited
+[pr-aiter-3117](../../sources/prs/aiter/PR-3117.md) (MXFP4 fused-MoE stage-2 for DeepSeek EP4
+prefill: async-X prologue, persistent expansion, wave-priority/scheduler-barrier tuning) was
+**merged then reverted the next day** (PR #3344). The strongest published win is the
+[Kimi-K2.5 mixed-precision fused MoE](../../sources/blogs/amd-flydsl-kimi-moe.md) (W4A16+BF16,
+replacing SGLang's Triton `fused_moe`): up to −65% TTFT / −69% TPOT / +162% throughput on MI300X,
+with upstreaming to SGLang/AITER "in progress" as of that post. Net: real demonstrated wins, but
+the exact merge status in AITER moves week to week — check upstream for live state.
+
+> **Post-cutoff PR landscape (beyond the KB cutoff 2026-04-27 — reference only, not captured as
+> source pages).** ROCm/aiter has ~448 PRs mentioning flydsl as of mid-2026. Notable ones:
+> [#3476](https://github.com/ROCm/aiter/pull/3476) (MoE inter_dim-128 bugfix, *merged*),
+> [#3470](https://github.com/ROCm/aiter/pull/3470) (MXFP4 a4w4 MoE backend, gfx950),
+> [#3408](https://github.com/ROCm/aiter/pull/3408) (MoE no-combine),
+> [#3377](https://github.com/ROCm/aiter/pull/3377) (MoE EP-reduce masked gather),
+> [#3268](https://github.com/ROCm/aiter/pull/3268) (GDR-prefill `chunk_gdn_fwd_h`, MI35X),
+> [#3106](https://github.com/ROCm/aiter/pull/3106) (gfx1250 MXScale FP8 GEMM),
+> [#3117](https://github.com/ROCm/aiter/pull/3117)→[#3344 revert](https://github.com/ROCm/aiter/pull/3344).
+> FlyDSL also appears in [pytorch/ao #4357](https://github.com/pytorch/ao/pull/4357) (mxfp8 quantize)
+> and sgl-project/sglang. ROCm/FlyDSL's own repo is at 0.2.0 (PR #609) with active feature work
+> ([#629](https://github.com/ROCm/FlyDSL/pull/629) MI355X FMHA, #522 intranode dispatch/combine).
 
 ## Status & Roadmap
 
@@ -113,9 +132,11 @@ next day** (PR #3344), so nothing FlyDSL currently ships in AITER; treat it as a
 - WIP perf tuning: PagedAttention, FlashAttention.
 - Open research: autotuning of block-tile / MFMA-shape / stage-count.
 
-Treat FlyDSL as a directional bet; CK-Tile remains the default for the highest-performance
-production AMD work. FlyDSL reached AITER's tree once (PR-3117) but was reverted, so it does
-not currently back any shipping AITER kernel.
+Treat FlyDSL as a directional bet under heavy active development: CK-Tile remains the default for
+the highest-performance production AMD work, but FlyDSL has merged code in AITER and a strong
+published MoE win (Kimi-K2.5), with broad upstreaming in progress. Pin the exact wheel/commit
+(public PyPI cp310 0.1.x, AMD nightly index py3.12/13 `0.1.x+date.commit`, or `main` at 0.2.0)
+when reproducing — the API and integration surface are still moving fast.
 
 ## See Also
 
@@ -123,4 +144,6 @@ not currently back any shipping AITER kernel.
 - [lang-composable-kernel](composable-kernel.md) — production C++ alternative FlyDSL ports
 - [lang-hip](hip.md) — low-level escape hatch
 - [blog-amd-flydsl-gemm](../../sources/blogs/amd-flydsl-gemm.md) — repo docs: pipeline + benchmark harness
+- [blog-amd-flydsl-kimi-moe](../../sources/blogs/amd-flydsl-kimi-moe.md) — Kimi-K2.5 fused-MoE win (benchmarked)
+- [blog-amd-flydsl-nightly-wheels](../../sources/blogs/amd-flydsl-nightly-wheels.md) — nightly-wheel install + version channels
 - [blog-amd-flydsl](../../sources/blogs/amd-flydsl.md) — design overview
