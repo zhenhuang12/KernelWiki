@@ -23,7 +23,8 @@ requirements — useful for version alignment. Backs [lang-flydsl](../../wiki/la
 
 - **AMD-hosted nightly index** (NOT public PyPI): `https://rocm.frameworks-nightlies.amd.com/whl/gfx942-gfx950/`
   install with `uv` (recommended) or `pip`.
-- **Python 3.12 or 3.13** (note: the public-PyPI `flydsl` wheels are cp310 — a different channel).
+- **Python 3.12 or 3.13** (the public-PyPI `flydsl` wheels span cp310–cp314; the two channels
+  differ by index host and version scheme, not by Python tag).
 - **ROCm 7.1 or 7.2** (ROCm 7.13 not yet supported); PyTorch-with-ROCm; MI300X/MI325X (gfx942) or
   MI350X/MI355X (gfx950).
 - Bare-metal or ROCm PyTorch containers.
@@ -36,7 +37,7 @@ repo `main` is at 0.2.0; **no 1.x / 1.18.0 exists on any channel**.)
 
 ## Why It Matters
 
-Two coexisting FlyDSL distribution channels (public PyPI cp310 0.1.x, and the AMD nightly index
-py3.12/3.13 `0.1.x+date.commit`) plus a fast-moving `main` mean "the FlyDSL version" is ambiguous —
+Two coexisting FlyDSL distribution channels (public PyPI 0.1.x cp310–cp314, and the AMD nightly
+index `0.1.x+date.commit`, py3.12/3.13) plus a fast-moving `main` mean "the FlyDSL version" is ambiguous —
 pin the exact wheel/commit when reproducing. See [lang-flydsl](../../wiki/languages/flydsl.md)
 version-basis note.

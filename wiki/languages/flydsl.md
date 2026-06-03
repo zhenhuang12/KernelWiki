@@ -112,7 +112,7 @@ with upstreaming to SGLang/AITER "in progress" as of that post. Net: real demons
 the exact merge status in AITER moves week to week — check upstream for live state.
 
 > **Post-cutoff PR landscape (beyond the KB cutoff 2026-04-27 — reference only, not captured as
-> source pages).** ROCm/aiter has ~448 PRs mentioning flydsl as of mid-2026. Notable ones:
+> source pages).** ROCm/aiter has ~460 PRs mentioning flydsl as of mid-2026 (count drifts weekly). Notable ones:
 > [#3476](https://github.com/ROCm/aiter/pull/3476) (MoE inter_dim-128 bugfix, *merged*),
 > [#3470](https://github.com/ROCm/aiter/pull/3470) (MXFP4 a4w4 MoE backend, gfx950),
 > [#3408](https://github.com/ROCm/aiter/pull/3408) (MoE no-combine),
@@ -135,7 +135,7 @@ the exact merge status in AITER moves week to week — check upstream for live s
 Treat FlyDSL as a directional bet under heavy active development: CK-Tile remains the default for
 the highest-performance production AMD work, but FlyDSL has merged code in AITER and a strong
 published MoE win (Kimi-K2.5), with broad upstreaming in progress. Pin the exact wheel/commit
-(public PyPI cp310 0.1.x, AMD nightly index py3.12/13 `0.1.x+date.commit`, or `main` at 0.2.0)
+(public PyPI 0.1.x cp310–cp314, AMD nightly index `0.1.x+date.commit` py3.12/13, or `main` at 0.2.0)
 when reproducing — the API and integration surface are still moving fast.
 
 ## See Also

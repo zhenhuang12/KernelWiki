@@ -60,7 +60,7 @@ CK lacks W4A16 and faulted on Kimi's E=384 shapes; Triton would need more tuning
 |--------|---------------|----------------|
 | TTFT   | 2918 → 1014 ms (**−65.3%**) | 33478 → 17730 ms (**−47.0%**) |
 | TPOT   | 38.77 → 28.26 ms (**−27.1%**) | 230.37 → 70.86 ms (**−69.2%**) |
-| throughput | +47.1% | 135.39 → 355.35 tok/s (**+162.4%**) |
+| throughput | 45.04 → 66.24 tok/s (**+47.1%**) | 135.39 → 355.35 tok/s (**+162.4%**) |
 
 Headline: up to **65% lower TTFT, 69% lower TPOT, 162% higher throughput**.
 

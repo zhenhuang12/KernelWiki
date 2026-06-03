@@ -32,9 +32,10 @@ share the *same* layout convention:
   `compile_preshuffle_gemm_a8(...)` (the reference implementation in the repo).
 - **ROCm/composable_kernel (CK / CK-Tile)** — the original C++ implementation FlyDSL ports.
 - **ROCm/aiter** — the production target FlyDSL's B layout is documented to match (the builder
-  docstring says it "matches aiter/CK preshuffle"). AITER once merged a FlyDSL MoE kernel
-  ([pr-aiter-3117](../../sources/prs/aiter/PR-3117.md)), but it was reverted (PR #3344) and does
-  not currently ship — see the MoE section below.
+  docstring says it "matches aiter/CK preshuffle"). FlyDSL→AITER integration is broadly active
+  (many GEMM/MoE PRs; some merged, e.g. #3476); the specific
+  [pr-aiter-3117](../../sources/prs/aiter/PR-3117.md) MoE kernel was merged then reverted
+  (PR #3344) so *that kernel* no longer ships — see the MoE section below.
 
 ## Why Preshuffle At All
 

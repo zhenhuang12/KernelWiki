@@ -124,6 +124,7 @@ GEMM?" The preshuffle layout, XOR16 swizzle, ping-pong LDS, K64 micro-step, and 
 epilogue are the same ingredients hand-tuned CK-Tile and AITER kernels use — FlyDSL just
 expresses them through layout algebra. Backs [technique-preshuffle-gemm](../../wiki/techniques/preshuffle-gemm.md)
 and [lang-flydsl](../../wiki/languages/flydsl.md). The AITER lineage is concrete: the
-preshuffle B layout is documented to match aiter/CK (per the builder docstring), and AITER
-merged a FlyDSL MoE kernel ([pr-aiter-3117](../prs/aiter/PR-3117.md)) — later reverted by
-PR #3344, so it is a technique demo rather than a currently-shipping kernel.
+preshuffle B layout is documented to match aiter/CK (per the builder docstring), and FlyDSL→AITER
+integration is broadly active (many GEMM/MoE PRs; some merged, e.g. #3476). The specific
+[pr-aiter-3117](../prs/aiter/PR-3117.md) MoE kernel was merged then reverted by PR #3344, so
+*that kernel* is a technique demo rather than currently shipping.
