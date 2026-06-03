@@ -15,6 +15,7 @@
 | [PTX Cache Policy Differentiation](../wiki/techniques/cache-policy.md) | cache-policy, vectorized-loads | sm100, sm90 | source-reported | snippet | 4 |
 | [Persistent Kernels with CLC](../wiki/techniques/persistent-kernels.md) | persistent-kernel, clc, tile-scheduling | sm100 | source-reported | snippet | 3 |
 | [Ping-Pong Scheduling](../wiki/techniques/ping-pong-scheduling.md) | ping-pong-scheduling, warp-specialization, tmem, pipeline-stages | sm100 | source-reported | snippet | 3 |
+| [Preshuffle GEMM Pipeline on AMD CDNA (FlyDSL / AITER / CK)](../wiki/techniques/preshuffle-gemm.md) | preshuffle, gemm, flydsl, mfma | cdna3, cdna4 | source-reported | snippet | 5 |
 | [Register Budgeting for Occupancy](../wiki/techniques/register-budgeting.md) | register-budgeting, register-reuse | sm100, sm90 | source-reported | snippet | 3 |
 | [Shared Memory Swizzling](../wiki/techniques/swizzling.md) | swizzling, shared-memory-optimization, tma | sm100, sm90 | source-reported | snippet | 3 |
 | [Software Pipelining and Multi-Stage Buffering](../wiki/techniques/pipeline-stages.md) | pipeline-stages, double-buffering, tma, mbarrier | sm100, sm90 | source-reported | snippet | 3 |

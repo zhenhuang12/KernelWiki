@@ -85,6 +85,7 @@ techniques:
   - direct-to-lds           # buffer_load_lds / global_load_lds prefetch pattern
   - mfma-pipelining         # K-stage software pipeline around MFMA
   - cpx-mode-partitioning   # CPX / DPX MCP partitioning placement
+  - preshuffle              # B-matrix pre-permuted to MFMA-native layout (aiter/CK/FlyDSL)
 
 kernel_types:
   - gemm

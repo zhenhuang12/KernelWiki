@@ -22,21 +22,31 @@ retrieved_at: 2026-04-27
 
 ## Programming Model
 
-```python
-import flydsl as fd
+Kernels are authored with the `@flyc.kernel` / `@flyc.jit` decorators over CuTe-style layout
+algebra in the `fly` MLIR dialect:
 
-@fd.kernel
-def matmul_bf16(A: fd.TileTensor[fd.bf16, "M K"],
-                 B: fd.TileTensor[fd.bf16, "K N"],
-                 C: fd.TileTensor[fd.f32,  "M N"]):
-    block = fd.BlockTile(M=128, N=128, K=64)
-    a = fd.load_to_lds(A.tile(block.m, block.k))
-    b = fd.load_to_lds(B.tile(block.k, block.n))
-    acc = fd.mfma(a, b, shape=(16, 16, 32))
-    fd.store(C.tile(block.m, block.n), acc)
+```python
+import flydsl.compiler as flyc
+import flydsl.expr as fx
+from flydsl.expr import gpu
+
+@flyc.kernel
+def vec_add_kernel(A: fx.Tensor, B: fx.Tensor, C: fx.Tensor, N: fx.Constexpr[int]):
+    idx = gpu.block_idx.x * 256 + gpu.thread_idx.x
+    # ... layout ops (make_layout/crd2idx), copy/MMA atoms, buffer intrinsics ...
+
+@flyc.jit
+def vec_add(A: fx.Tensor, B: fx.Tensor, C: fx.Tensor, N: fx.Constexpr[int],
+            stream: fx.Stream = fx.Stream(None)):
+    vec_add_kernel(A, B, C, N).launch(grid=(N // 256,), block=(256,), stream=stream)
 ```
 
-The compiler chooses LDS swizzle, wave specialization, and MFMA-shape based on the declared layouts. Lowering inspects `block.m`/`block.n` against the target ISA's MFMA catalogue (cf. [doc-amd-cdna3-isa](../docs/amd-cdna3-isa.md), [doc-amd-cdna4-isa](../docs/amd-cdna4-isa.md)) and emits the appropriate intrinsic chain.
+The author declares LDS swizzle, MFMA-shape, and pipeline structure via layouts; the compiler
+lowers them (it does not auto-tune these — autotuning is roadmap, see [lang-flydsl](../../wiki/languages/flydsl.md)).
+Lowering picks MFMA atoms against the target ISA's catalogue (cf. [doc-amd-cdna3-isa](../docs/amd-cdna3-isa.md),
+[doc-amd-cdna4-isa](../docs/amd-cdna4-isa.md)) and emits the appropriate intrinsic chain. The
+concrete tile-GEMM machinery (preshuffle B, XOR16 swizzle, ping-pong LDS) is captured in
+[blog-amd-flydsl-gemm](amd-flydsl-gemm.md).
 
 ## Status
 
