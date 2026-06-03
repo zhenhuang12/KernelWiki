@@ -100,19 +100,22 @@ This is the same layout convention as CK / AITER (the B-layout builder docstring
 "matches aiter/CK preshuffle"). Full treatment in
 [technique-preshuffle-gemm](../techniques/preshuffle-gemm.md).
 
-FlyDSL also runs in production inside AITER: [pr-aiter-3117](../../sources/prs/aiter/PR-3117.md)
-ships a FlyDSL MXFP4 fused-MoE stage-2 kernel for DeepSeek-R1/V3 EP4 prefill (async-X prologue,
-persistent expansion, wave-priority + scheduler-barrier tuning).
+FlyDSL has reached AITER's tree at least once: [pr-aiter-3117](../../sources/prs/aiter/PR-3117.md)
+merged a FlyDSL MXFP4 fused-MoE stage-2 kernel for DeepSeek-R1/V3 EP4 prefill (async-X prologue,
+persistent expansion, wave-priority + scheduler-barrier tuning) — though it was **reverted the
+next day** (PR #3344), so nothing FlyDSL currently ships in AITER; treat it as a technique demo.
 
 ## Status & Roadmap
 
-- Working today: fp8/int8/int4(W4A8)/fp16/bf16 preshuffle GEMM, MXFP4 block-scale GEMM,
+- Working today: fp8/int8/int4(W4A8)/fp16/bf16 preshuffle GEMM, FP8 block-scale GEMM
+  (`blockscale_preshuffle_gemm.py`), fp4/MXFP4 GEMM (`preshuffle_gemm.py` `in_dtype="fp4"`),
   2-stage MoE, MLA decode, paged-attention decode, norms/softmax; WMMA GEMM on gfx1250.
 - WIP perf tuning: PagedAttention, FlashAttention.
 - Open research: autotuning of block-tile / MFMA-shape / stage-count.
 
 Treat FlyDSL as a directional bet; CK-Tile remains the default for the highest-performance
-production AMD work, though FlyDSL now backs at least one shipping AITER kernel.
+production AMD work. FlyDSL reached AITER's tree once (PR-3117) but was reverted, so it does
+not currently back any shipping AITER kernel.
 
 ## See Also
 

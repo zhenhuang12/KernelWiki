@@ -29,10 +29,12 @@ This page documents the recipe as it appears in three interlocking AMD codebases
 share the *same* layout convention:
 
 - **[ROCm/FlyDSL](https://github.com/ROCm/FlyDSL)** — `kernels/preshuffle_gemm.py`,
-  `compile_preshuffle_gemm_a8(...)` (the canonical, fully-documented reference).
+  `compile_preshuffle_gemm_a8(...)` (the reference implementation in the repo).
 - **ROCm/composable_kernel (CK / CK-Tile)** — the original C++ implementation FlyDSL ports.
-- **ROCm/aiter** — production deployment; FlyDSL's B layout docstring literally says it
-  "matches aiter/CK preshuffle," and AITER ships a FlyDSL MoE kernel ([pr-aiter-3117](../../sources/prs/aiter/PR-3117.md)).
+- **ROCm/aiter** — the production target FlyDSL's B layout is documented to match (the builder
+  docstring says it "matches aiter/CK preshuffle"). AITER once merged a FlyDSL MoE kernel
+  ([pr-aiter-3117](../../sources/prs/aiter/PR-3117.md)), but it was reverted (PR #3344) and does
+  not currently ship — see the MoE section below.
 
 ## Why Preshuffle At All
 
@@ -136,7 +138,8 @@ Related: [technique-direct-to-lds](direct-to-lds.md), [technique-mfma-pipelining
 With `use_cshuffle_epilog=True`, the accumulator is written to LDS in row-major, a barrier,
 then threads are **remapped to a `(MLane, NLane)=(8, 32)` grid and re-read** so output stores
 become coalesced `half2` (`e_vec=2`) writes — a port of CK's CShuffle (an LDS round-trip +
-thread remap; no `ds_bpermute` in the FlyDSL implementation). Without it, `default_epilog`
+thread remap; no `ds_bpermute` in the FlyDSL `mfma_epilogues.py` source, though AMD's
+`prebuilt_kernels_guide.md` §3.1 describes it as `ds_bpermute`). Without it, `default_epilog`
 uses the raw MFMA row iterator
 `row = bx_m + mi*16 + lane_div_16*4 + ii`. See [technique-epilogue-fusion](epilogue-fusion.md).
 
@@ -144,8 +147,9 @@ uses the raw MFMA row iterator
 
 - **W4A8 (`in_dtype="int4"`)**: A is int8; B is packed int4 (2 values/byte), unpacked to
   int8 in-kernel before MFMA.
-- **fp4 / MXFP4**: block-scale path (`blockscale_preshuffle_gemm.py`) uses CDNA 4's
-  scaled MFMA `v_mfma_scale_f32_*_f8f6f4`; gfx950 only.
+- **fp4 / MXFP4**: handled inside `preshuffle_gemm.py` itself (`in_dtype="fp4"`), which emits
+  CDNA 4's scaled MFMA `mfma_scale_f32_16x16x128_f8f6f4`; gfx950 only. (The separate
+  `blockscale_preshuffle_gemm.py` is the **FP8** per-block-scale variant, not MXFP4.)
 
 ## Tuned Configurations (FlyDSL `scripts/run_benchmark.sh`)
 
@@ -166,18 +170,21 @@ uses the raw MFMA row iterator
 
 FP4 lives in a **separate** `GEMM_FP4_SHAPES` list (gfx950 only), all `M=N=K=8192` sweeping
 the tile: `(64,128,256)`, `(64,256,256)`, `(128,256,256)`, `(128,256,128)`. There are also
-`*_ASYNC` variants (append a trailing `lds_stage=2`) and `HGEMM_SHAPES_GFX950/_CDNA3` for
-fp16/bf16.
+`*_ASYNC` variants — same fields plus an optional trailing `waves_per_eu` (the async path is
+enabled by the harness passing `--use_async_copy`, not by a shape-string field) — and
+`HGEMM_SHAPES_GFX950/_CDNA3` for fp16/bf16.
 
 Pattern *inferred* from the table (not stated in FlyDSL docs): **narrow-M (decode-like,
 M=16)** favors `tile_m=16, tile_n=128, tile_k=256`; **large-M (prefill)** favors larger
 `tile_m` (64–128) with `tile_n=256`. (Absolute TFLOPS are not published in the repo — the
 harness reports `TB/s` and `TFLOPS` per-shape and must be run on-device.)
 
-## Extending To MoE: AITER PR-3117 (FlyDSL in production)
+## Extending To MoE: AITER PR-3117 (FlyDSL MoE example — merged then reverted)
 
 [pr-aiter-3117](../../sources/prs/aiter/PR-3117.md) — *"perf(flydsl): MXFP4 fused-MoE
-stage2 optimization for EP prefill"* — is a shipping FlyDSL production variant in AITER. It
+stage2 optimization for EP prefill"* — was a FlyDSL production variant merged into AITER on
+2026-05-25 and **reverted the next day by [PR #3344](https://github.com/ROCm/aiter/pull/3344)**,
+so it does not currently ship. It remains a useful worked example of the techniques. It
 adds `_t64x128x256_atomic_persist_async_w4_cumul3`, an fp4×fp4 (MXFP4) stage-2 fused-MoE
 variant for DeepSeek-R1/V3 EP4 prefill on MI355X (CDNA 4), layering on top of the preshuffle
 base. Measured result (PR body, MI355X, 3 reps): `fused_moe` **3711.8 → 3384.9 µs, −8.81%**
@@ -215,7 +222,7 @@ xcd-aware tile expansion, scheduler barriers, and wave priority — see
 
 - **LDS budget**: 64 KB (gfx942) → 160 KB (gfx950) — enables `lds_stage=2` ping-pong at the
   larger tiles without spilling.
-- **Scaled MFMA**: the fp4/MXFP4 block-scale path needs `v_mfma_scale_f32_*_f8f6f4`
+- **Scaled MFMA**: the fp4/MXFP4 scaled path needs `v_mfma_scale_f32_*_f8f6f4`
   (gfx950 only); on gfx942 the same builder uses software-scaled fp8 MFMA.
 - **Wide direct-to-LDS**: `use_async_copy` lowers to `buffer_load_dwordx4_lds` (128-bit) on
   CDNA 4 vs the 32-bit variant on CDNA 3.

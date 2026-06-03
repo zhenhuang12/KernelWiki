@@ -47,7 +47,7 @@ from kernels.preshuffle_gemm import compile_preshuffle_gemm_a8
 launch_fn = compile_preshuffle_gemm_a8(
     M=16, N=5120, K=8192,
     tile_m=16, tile_n=128, tile_k=256,
-    in_dtype="fp8",          # fp8 | int8 | int4 | fp16 | bf16 | fp4
+    in_dtype="fp8",          # fp8 | int8 | int4(=W4A8) | fp16 | bf16 | fp4
     lds_stage=2,             # 2 = ping-pong LDS (tuned), 1 = single buffer
     use_cshuffle_epilog=False,
     # waves_per_eu=None,     # occupancy hint (1-4 caps occupancy)
@@ -83,7 +83,8 @@ Computes `C[M,N] = A[M,K] @ B[N,K]^T` with B pre-permuted to MFMA-native layout.
 
 ## Other Pre-built Kernels
 
-`blockscale_preshuffle_gemm.py` (MXFP4 block-scale), `moe_gemm_2stage.py` /
+`blockscale_preshuffle_gemm.py` (FP8 per-block-scale GEMM, ScaleBlockN=ScaleBlockK=128;
+fp4/MXFP4 input is handled in `preshuffle_gemm.py` via `in_dtype="fp4"`), `moe_gemm_2stage.py` /
 `moe_blockscale_2stage.py` / `mixed_moe_gemm_2stage.py` (2-stage gate-up + reduce MoE),
 `mla_fwd_decode*.py`, `pa_decode_fp8.py`, `flash_attn_func.py`, `hgemm_splitk.py`,
 plus `layernorm/rmsnorm/softmax` (LDS-cached, XOR-shuffle wave reductions). gfx1250 uses
@@ -108,7 +109,8 @@ bf16,5120 ,5120 ,8320,64 ,256,128
 
 FP4 is a separate `GEMM_FP4_SHAPES` list (gfx950 only), all `8192,8192,8192` over tiles
 `(64,128,256)/(64,256,256)/(128,256,256)/(128,256,128)`. There are also `*_ASYNC` variants
-(trailing `lds_stage=2`) and `HGEMM_SHAPES_GFX950/_CDNA3` for fp16/bf16.
+(same fields + optional trailing `waves_per_eu`; async is enabled by the harness flag
+`--use_async_copy`, not a shape-string field) and `HGEMM_SHAPES_GFX950/_CDNA3` for fp16/bf16.
 
 Output is tabular `TB/s` + `TFLOPS` per shape (absolute numbers are not published in the
 repo; the harness must be run on-device). The perf harness itself —
@@ -122,4 +124,6 @@ GEMM?" The preshuffle layout, XOR16 swizzle, ping-pong LDS, K64 micro-step, and 
 epilogue are the same ingredients hand-tuned CK-Tile and AITER kernels use — FlyDSL just
 expresses them through layout algebra. Backs [technique-preshuffle-gemm](../../wiki/techniques/preshuffle-gemm.md)
 and [lang-flydsl](../../wiki/languages/flydsl.md). The AITER lineage is concrete: the
-preshuffle B layout matches aiter/CK, and AITER ships a FlyDSL MoE kernel ([pr-aiter-3117](../prs/aiter/PR-3117.md)).
+preshuffle B layout is documented to match aiter/CK (per the builder docstring), and AITER
+merged a FlyDSL MoE kernel ([pr-aiter-3117](../prs/aiter/PR-3117.md)) — later reverted by
+PR #3344, so it is a technique demo rather than a currently-shipping kernel.
